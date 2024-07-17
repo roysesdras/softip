@@ -56,6 +56,8 @@ $stmt_resources = $pdo->query("SELECT resources.*, formations.titre AS formation
 $resources = $stmt_resources->fetchAll();
 
 
+$trainer_id = $_SESSION['trainer_id']; // Assure-toi que l'ID du formateur est dans la session
+
 // Récupérer les feedbacks des étudiants pour les sessions gérées par le formateur
 $stmt_received_feedbacks = $pdo->prepare("
     SELECT feedbacks.*, students.username AS student_username, sessions.title AS session_title
@@ -63,6 +65,7 @@ $stmt_received_feedbacks = $pdo->prepare("
     INNER JOIN students ON feedbacks.student_id = students.id
     INNER JOIN sessions ON feedbacks.session_id = sessions.id
     WHERE sessions.trainer_id = ?
+    ORDER BY feedbacks.created_at DESC
 ");
 $stmt_received_feedbacks->execute([$trainer_id]);
 $received_feedbacks = $stmt_received_feedbacks->fetchAll();
@@ -615,25 +618,29 @@ if (isset($_POST['restore_answer'])) {
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <?php foreach ($received_feedbacks as $feedback): ?>
-                                <tr>
-                                    <td><?php echo htmlspecialchars($feedback['student_username']); ?></td>
-                                    <td><?php echo htmlspecialchars($feedback['session_title']); ?></td>
-                                    <td><?php echo htmlspecialchars($feedback['feedback']); ?></td>
-                                    <td><?php echo htmlspecialchars($feedback['rating']); ?></td>
-                                    <td><?php echo htmlspecialchars($feedback['created_at']); ?></td>
-                                    <td>
-                                        <a href="edit_feedback.php?id=<?php echo $feedback['id']; ?>" class="btn btn-warning me-2">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </a>
-                                        <a href="delete_feedback.php?id=<?php echo $feedback['id']; ?>" class="btn btn-danger">
-                                            <i class="bi bi-trash"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
+                        <?php if (empty($received_feedbacks)): ?>
+                            <p>Aucun feedback disponible pour l'instant.</p>
+                        <?php else: ?>
+                            <tbody>
+                                <?php foreach ($received_feedbacks as $feedback): ?>
+                                    <tr>
+                                        <td><?php echo htmlspecialchars($feedback['student_username']); ?></td>
+                                        <td><?php echo htmlspecialchars($feedback['session_title']); ?></td>
+                                        <td><?php echo htmlspecialchars($feedback['feedback']); ?></td>
+                                        <td><?php echo htmlspecialchars($feedback['rating']); ?></td>
+                                        <td><?php echo htmlspecialchars($feedback['created_at']); ?></td>
+                                        <td>
+                                            <a href="edit_feedback.php?id=<?php echo $feedback['id']; ?>" class="btn btn-warning me-2">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                            <a href="delete_feedback.php?id=<?php echo $feedback['id']; ?>" class="btn btn-danger">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        <?php endif; ?>
                     </table>
                 </div>
             </div>
