@@ -1,0 +1,239 @@
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&family=Exo:ital,wght@0,100..900;1,100..900&family=Indie+Flower&display=swap');
+
+
+body {
+    font-family        : "Exo", sans-serif;
+    font-optical-sizing: auto;
+    font-weight        : 400;
+    font-style         : normal;
+}
+
+
+/* For Them */
+.bd-placeholder-img {
+    font-size          : 1.125rem;
+    text-anchor        : middle;
+    -webkit-user-select: none;
+    -moz-user-select   : none;
+    user-select        : none;
+}
+
+@media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+    }
+}
+
+.b-example-divider {
+    width           : 100%;
+    height          : 3rem;
+    background-color: rgba(0, 0, 0, .1);
+    border          : solid rgba(0, 0, 0, .15);
+    border-width    : 1px 0;
+    box-shadow      : inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+}
+
+.b-example-vr {
+    flex-shrink: 0;
+    width      : 1.5rem;
+    height     : 100vh;
+}
+
+.bi {
+    vertical-align: -.125em;
+    fill          : currentColor;
+}
+
+.nav-scroller {
+    position  : relative;
+    z-index   : 2;
+    height    : 2.75rem;
+    overflow-y: hidden;
+}
+
+.nav-scroller .nav {
+    display                   : flex;
+    flex-wrap                 : nowrap;
+    padding-bottom            : 1rem;
+    margin-top                : -1px;
+    overflow-x                : auto;
+    text-align                : center;
+    white-space               : nowrap;
+    -webkit-overflow-scrolling: touch;
+}
+
+.btn-theme {
+    border          : solid 1px #033e60;
+    color           : #fff;
+    margin          : 2em;
+    padding         : 0.75em;
+    background-color: #033e60;
+    box-shadow      : rgba(0, 0, 0, 0.35) 0px 5px 15px;
+
+}
+
+.bd-mode-toggle {
+    z-index: 1500;
+}
+
+.bd-mode-toggle .dropdown-menu .active .bi {
+    display: block !important;
+}
+
+.bar .logo img {
+    max-height: 50px;
+}
+
+.get-started {
+    border          : solid 1px #033e60;
+    border-radius   : 3px;
+    background-color: #033e60;
+    color           : #fff;
+    padding         : 0.38em;
+}
+
+.get-started:hover {
+    border          : solid 1px #033e60;
+    border-radius   : 3px;
+    background-color: transparent;
+    color           : #033e60;
+    padding         : 0.38em;
+}
+
+p,
+li,
+form,
+input {
+    font-family        : "Exo", sans-serif;
+    font-optical-sizing: auto;
+    font-weight        : 400;
+    font-style         : normal;
+}
+
+a {
+    font-family        : "Exo", sans-serif;
+    font-optical-sizing: auto;
+    font-weight        : 400;
+    font-style         : italic;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family        : "Exo", sans-serif;
+    font-optical-sizing: auto;
+    font-weight        : 400;
+    font-style         : normal;
+}
+
+.footer ul a,
+div .download a,
+div .news a,
+div a {
+    font-family        : "Exo", sans-serif;
+    font-optical-sizing: auto;
+    font-weight        : 400;
+    font-style         : normal;
+}
+
+/* ...... pour la carte actualite .............*/
+.bi {
+    vertical-align: -0.125em;
+    fill          : currentColor;
+}
+
+.actu {
+    box-shadow      : rgba(0, 0, 0, 0.45) 0px 25px 20px -20px;
+    padding         : 0.1em;
+    margin-bottom   : 1em;
+    transition      : transform 0.1s ease, box-shadow 0.1s ease, background-color 0.1s ease;
+    background-color: #f8f8f8;
+    border-radius   : 8px;
+}
+
+.actu:hover {
+    transform       : scale(1.05) rotate(-1deg);
+    box-shadow      : rgba(0, 0, 0, 0.45) 0px 35px 30px -20px;
+    background-color: #d8d8d8;
+}
+
+.button {
+    border          : solid 1px #033e60;
+    padding         : 0.15em;
+    color           : #033e60;
+    background-color: transparent;
+    text-decoration : none;
+}
+
+.button:hover {
+    border          : solid 1px #033e60;
+    padding         : 0.10em;
+    color           : #fff;
+    background-color: #033e60;
+    text-decoration : none;
+}
+
+.linkFooter {
+    background-color: #033e60;
+    color           : #fff;
+}
+
+.footer {
+    box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 48px;
+}
+
+/* CSS pour les newsletters */
+.box {
+    width  : 100%;
+    padding: 10px;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px,
+        rgba(0, 0, 0, 0.22) 0px 10px 10px;
+    text-align   : center;
+    margin       : 0 20px 0 0;
+    border-radius: 5px;
+}
+
+.back-to-top {
+    position     : fixed;
+    visibility   : hidden;
+    opacity      : 0;
+    right        : 15px;
+    /* Change from right to left */
+    bottom       : 15px;
+    z-index      : 996;
+    background   : #033e60;
+    width        : 40px;
+    height       : 40px;
+    border-radius: 50px;
+    transition   : all 0.4s;
+    box-shadow   : rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.back-to-top i {
+    font-size  : 28px;
+    color      : #fff;
+    line-height: 0;
+}
+
+.back-to-top:hover {
+    background: #033e60;
+    color     : #fff;
+}
+
+.back-to-top.active {
+    visibility: visible;
+    opacity   : 1;
+}
+
+.evene {
+    padding: 0.5em;
+}
+
+.entry {
+    padding      : 5px;
+    margin-bottom: 30px;
+    box-shadow   : 0 4px 16px rgba(0, 0, 0, 0.1);
+}
