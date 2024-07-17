@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['error_message'] = 'Nom d\'utilisateur déjà pris. Veuillez en choisir un autre.';
     } else {
         // Gestion de l'avatar par défaut
-        $default_avatar = '../avatars_img/OIP (2).jpg'; // Chemin de l'avatar par défaut
+        $default_avatar = '../avatar_img/O.jpg'; // Chemin de l'avatar par défaut
 
         // Insérer le nouveau formateur dans la base de données avec avatar, numéro de téléphone et biographie
         $stmt = $pdo->prepare("INSERT INTO trainers (username, password, email, phone_number, bio, avatar) VALUES (?, ?, ?, ?, ?, ?)");
@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Gestion de l'upload de l'avatar
         if (!empty($_FILES['avatar']['name'])) {
-            $avatar_path = '../avatars_img/' . basename($_FILES['avatar']['name']);
+            $avatar_path = '../avatar_img/' . basename($_FILES['avatar']['name']);
             if (move_uploaded_file($_FILES['avatar']['tmp_name'], $avatar_path)) {
                 // Avatar téléchargé avec succès, mettre à jour le chemin dans la base de données
                 $stmt_update_avatar = $pdo->prepare("UPDATE trainers SET avatar = ? WHERE username = ?");

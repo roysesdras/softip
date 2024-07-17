@@ -2,8 +2,8 @@
 session_start();
 include('../admin/config.php');
 
-// Vérifiez si l'utilisateur est connecté
-if (!isset($_SESSION['student_id'])) {
+// Vérifiez si un étudiant, un formateur ou un administrateur est connecté
+if (!isset($_SESSION['student_id']) && !isset($_SESSION['trainer_id']) && !isset($_SESSION['admin_id'])) {
     header('Location: ../students/login_student_cool.php');
     exit;
 }
@@ -18,20 +18,20 @@ if (!isset($_SESSION['student_id'])) {
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-   
+    <?php include('navbar.php'); ?>
 
     <div class="container">
         <h2>Créer un Nouveau Sujet</h2>
         <form method="post" action="submit_topic.php">
-            <div>
-                <label for="title">Titre:</label>
-                <input type="text" id="title" name="title" required>
+            <div class="mb-3">
+                <label for="title" class="form-label">Titre:</label>
+                <input type="text" class="form-control" id="title" name="title" required>
             </div>
-            <div>
-                <label for="description">Description:</label>
-                <textarea id="description" name="description" required></textarea>
+            <div class="mb-3">
+                <label for="description" class="form-label">Description:</label>
+                <textarea class="form-control" id="description" name="description" required></textarea>
             </div>
-            <button type="submit">Créer</button>
+            <button type="submit" class="btn btn-primary">Créer</button>
         </form>
     </div>
 </body>

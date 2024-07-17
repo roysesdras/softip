@@ -31,8 +31,10 @@ $stmt = $pdo->prepare("SELECT formations.id, formations.titre, formations.descri
 $stmt->execute([$student_id]);
 $formations = $stmt->fetchAll();
 
-// Récupérer les ressources associées aux formations de l'étudiant
+// Récupérer les IDs des formations
 $formation_ids = array_column($formations, 'id');
+
+// Récupérer les ressources associées aux formations de l'étudiant
 if (!empty($formation_ids)) {
     $in_query = implode(',', array_fill(0, count($formation_ids), '?'));
     $stmt = $pdo->prepare("SELECT * FROM resources WHERE formation_id IN ($in_query)");
@@ -56,23 +58,24 @@ if (!empty($formation_ids)) {
     $sessions = [];
 }
 
-// Récupérer les résultats des quiz
+// Récupérer les résultats des quiz filtrés par formation
 $stmt_results = $pdo->prepare("
     SELECT quizzes.titre, SUM(IF(questions.correct_option = student_answers.answer, 1, 0)) AS score, MAX(student_answers.submitted_at) AS date_taken
     FROM quizzes
     JOIN questions ON quizzes.id = questions.quiz_id
     LEFT JOIN student_answers ON questions.id = student_answers.question_id AND student_answers.student_id = ?
+    WHERE quizzes.formation_id IN ($in_query)
     GROUP BY quizzes.id
 ");
-$stmt_results->execute([$student_id]);
+$stmt_results->execute(array_merge([$student_id], $formation_ids));
 $results = $stmt_results->fetchAll();
 
-
-// Récupérer les quizzes disponibles
+// Récupérer les quizzes disponibles filtrés par formation
 $stmt_quizzes = $pdo->prepare("
     SELECT * FROM quizzes
+    WHERE formation_id IN ($in_query)
 ");
-$stmt_quizzes->execute();
+$stmt_quizzes->execute($formation_ids);
 $quizzes = $stmt_quizzes->fetchAll();
 
 // Récupérer les questions des quiz pour répondre
@@ -97,6 +100,7 @@ $stmt_notifications = $pdo->prepare("
 $stmt_notifications->execute([$student_id]);
 $notifications = $stmt_notifications->fetchAll();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -377,6 +381,7 @@ $notifications = $stmt_notifications->fetchAll();
                         </select>
                     </div>
                 </form>
+
 
                 <?php if ($selected_quiz_id && count($questions) > 0): ?>
                     <form action="submit_answers.php" method="POST">

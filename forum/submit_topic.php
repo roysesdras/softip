@@ -2,25 +2,22 @@
 session_start();
 include('../admin/config.php');
 
-// Vérifiez si l'utilisateur est connecté
-if (!isset($_SESSION['student_id'])) {
+// Vérifiez si un étudiant, un formateur ou un administrateur est connecté
+if (!isset($_SESSION['student_id']) && !isset($_SESSION['trainer_id']) && !isset($_SESSION['admin_id'])) {
     header('Location: ../students/login_student_cool.php');
     exit;
 }
 
-$title = $_POST['title'];
-$description = $_POST['description'];
-$created_by = $_SESSION['student_id'];
-
-$query = "INSERT INTO topics (title, description, created_by) VALUES (:title, :description, :created_by)";
-$stmt = $pdo->prepare($query);
-$stmt->bindParam(':title', $title);
-$stmt->bindParam(':description', $description);
-$stmt->bindParam(':created_by', $created_by);
-
-if ($stmt->execute()) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $title = htmlspecialchars($_POST['title']);
+    $description = htmlspecialchars($_POST['description']);
+    
+    // Insérer le sujet dans la base de données
+    $stmt = $pdo->prepare("INSERT INTO topics (title, description, created_at) VALUES (?, ?, NOW())");
+    $stmt->execute([$title, $description]);
+    
+    $_SESSION['success_message'] = 'Sujet créé avec succès.';
     header('Location: forum.php');
-} else {
-    echo "Erreur lors de la création du sujet.";
+    exit;
 }
 ?>

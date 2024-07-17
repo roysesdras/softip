@@ -2,8 +2,8 @@
 session_start();
 include('../admin/config.php');
 
-// Vérifiez si l'utilisateur est connecté
-if (!isset($_SESSION['student_id'])) {
+// Vérifiez si un étudiant, un formateur ou un administrateur est connecté
+if (!isset($_SESSION['student_id']) && !isset($_SESSION['trainer_id']) && !isset($_SESSION['admin_id'])) {
     header('Location: ../students/login_student_cool.php');
     exit;
 }
@@ -18,10 +18,16 @@ $stmt->execute();
 $topic = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Récupérer les discussions pour ce sujet
-$query = "SELECT discussions.*, students.username, students.avatar 
+$query = "SELECT discussions.*, 
+                 students.username AS student_username, students.avatar AS student_avatar, 
+                 trainers.username AS trainer_username, trainers.avatar AS trainer_avatar, 
+                 administrators.username AS admin_username
           FROM discussions 
-          JOIN students ON discussions.student_id = students.id 
-          WHERE topic_id = :topic_id ORDER BY created_at DESC";
+          LEFT JOIN students ON discussions.student_id = students.id 
+          LEFT JOIN trainers ON discussions.trainer_id = trainers.id 
+          LEFT JOIN administrators ON discussions.admin_id = administrators.id 
+          WHERE topic_id = :topic_id 
+          ORDER BY created_at DESC";
 $stmt = $pdo->prepare($query);
 $stmt->bindParam(':topic_id', $topic_id, PDO::PARAM_INT);
 $stmt->execute();
@@ -33,7 +39,7 @@ $discussions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $topic['title']; ?></title>
+    <title><?php echo htmlspecialchars($topic['title']); ?></title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-lite.min.css" rel="stylesheet">
@@ -51,23 +57,34 @@ $discussions = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php include('../navbar.php'); ?>
 
     <div class="container">
-        <!-- <h2><?php //echo $topic['title']; ?></h2>
-        <p><?php //echo $topic['description']; ?></p>
-        <a href="create_discussion.php?topic_id=<?php //echo $topic_id; ?>" class="btn btn-primary">Ajouter une discussion</a> -->
         <ul class="list-group mt-3">
             <?php foreach ($discussions as $discussion): ?>
                 <li class="list-group-item">
                     <div class="d-flex align-items-center">
-                        <?php if (!empty($discussion['avatar'])): ?>
-                            <img src="<?php echo $discussion['avatar']; ?>" alt="Avatar" class="avatar me-3">
+                        <?php 
+                        $username = '';
+                        $avatar = '';
+                        
+                        if (!empty($discussion['student_username'])) {
+                            $username = $discussion['student_username'];
+                            $avatar = $discussion['student_avatar'];
+                        } elseif (!empty($discussion['trainer_username'])) {
+                            $username = $discussion['trainer_username'];
+                            $avatar = $discussion['trainer_avatar'];
+                        } elseif (!empty($discussion['admin_username'])) {
+                            $username = $discussion['admin_username'];
+                            $avatar = '';  // Les administrateurs n'ont pas d'avatar
+                        }
+
+                        if (!empty($avatar)): ?>
+                            <img src="<?php echo htmlspecialchars($avatar); ?>" alt="Avatar" class="avatar me-3">
                         <?php else: ?>
-                            <img src="../avatar_img/R.jpg" alt="Avatar par défaut" class="avatar me-3">
+                            <img src="../avatar_img/default_avatar.png" alt="Avatar par défaut" class="avatar me-3">
                         <?php endif; ?>
                         <div>
-                            <h5 class="mb-0"><?php echo $discussion['username']; ?></h5>
-                            <small><?php echo $discussion['created_at']; ?></small>
-                            <p><?php echo $discussion['message']; ?></p>
-                            <!-- <a href="discussion.php?id=<?php //echo $discussion['id']; ?>">répondre</a> -->
+                            <h5 class="mb-0"><?php echo htmlspecialchars($username); ?></h5>
+                            <small><?php echo htmlspecialchars($discussion['created_at']); ?></small>
+                            <p><?php echo htmlspecialchars($discussion['message']); ?></p>
                         </div>
                     </div>
                 </li>
@@ -75,7 +92,7 @@ $discussions = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </ul>
 
         <form method="post" action="submit_discussion.php">
-            <input type="hidden" name="topic_id" value="<?php echo $topic_id; ?>">
+            <input type="hidden" name="topic_id" value="<?php echo htmlspecialchars($topic_id); ?>">
             <div>
                 <label for="message">Message:</label>
                 <textarea id="summernote" name="message" required></textarea>
@@ -99,10 +116,6 @@ $discussions = $stmt->fetchAll(PDO::FETCH_ASSOC);
             });
         });
     </script>
-
-
-
-
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-lite.min.js"></script>

@@ -272,7 +272,7 @@ if (isset($_POST['restore_answer'])) {
                 <div class="offcanvas-body">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="logout.php">Se Déconnecter</a>
+                            <a class="nav-link" href="logout_trainer.php">Se Déconnecter</a>
                         </li>
                         <!-- <li class="nav-item">
                             <a class="nav-link" href="../pages/notes.php">Mes Notes</a>
@@ -296,7 +296,7 @@ if (isset($_POST['restore_answer'])) {
                                     if ($trainer && !empty($trainer['avatar'])) {
                                         echo '<img src="' . $trainer['avatar'] . '" alt="Avatar" class="avatar-img rounded-circle me-2">';
                                     } else {
-                                        echo '<img src="../default_avatar.jpg" alt="Avatar par défaut" class="avatar-img rounded-circle me-2">';
+                                        echo '<img src="../avatar_img/O.jpg" alt="Avatar par défaut" class="avatar-img rounded-circle me-2">';
                                     }
                                     
                                     // Afficher le nom d'utilisateur du formateur

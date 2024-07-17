@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </form>
                 <div class="mt-3">
                     <a href="forgot_password.php">mot de passe oublier ?</a> <br>
-                    <p>vous n'avez pas de compte, <a href="register.php">créez-en un</a></p>
+                    <p>vous n'avez pas de compte, <a href="register_trainer.php">créez-en un</a></p>
                 </div>
             </div>
             <div class="col-md-4"></div>
