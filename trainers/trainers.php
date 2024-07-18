@@ -277,9 +277,12 @@ if (isset($_POST['restore_answer'])) {
                         <li class="nav-item">
                             <a class="nav-link" href="logout_trainer.php">Se Déconnecter</a>
                         </li>
-                        <!-- <li class="nav-item">
-                            <a class="nav-link" href="../pages/notes.php">Mes Notes</a>
-                        </li> -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="../cours/insert_cours.php" target="_blanck">Ajouter Cours</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../cours/mes_cours_formateur.php" target="_blanck">Gérer mes cours</a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="../forum/forum.php" target="_blank">Forum</a>
                         </li>

@@ -1,7 +1,7 @@
 <?php
 
 // Paramètres de connexion à la base de données MySQL
-$host = '127.0.0.1';
+$host = 'localhost';
 $db = 'soft_ip';
 $user = 'root'; // Votre nom d'utilisateur MySQL
 $pass = ''; // Votre mot de passe MySQL

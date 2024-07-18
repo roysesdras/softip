@@ -215,6 +215,9 @@ $notifications = $stmt_notifications->fetchAll();
                             <a class="nav-link" href="../pages/notes.php">Mes Notes</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="access_course.php">Mesc Cours</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="../forum/forum.php" target="_blank">Forum</a>
                         </li>
                     </ul>

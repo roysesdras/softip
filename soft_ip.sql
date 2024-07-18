@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : jeu. 18 juil. 2024 à 12:44
+-- Généré le : ven. 19 juil. 2024 à 01:23
 -- Version du serveur : 10.4.27-MariaDB
 -- Version de PHP : 7.4.33
 
@@ -57,6 +57,55 @@ CREATE TABLE `annonces` (
 
 INSERT INTO `annonces` (`id`, `description`) VALUES
 (1, 'Le 3 Août 2024 nous débutons la 1ere session des évaluation et le 21 septembre, il y a la fête de Septembre ah oui');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `cours`
+--
+
+CREATE TABLE `cours` (
+  `id` int(11) NOT NULL,
+  `nom` varchar(255) NOT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `duree` int(11) DEFAULT NULL,
+  `niveau` enum('Débutant','Intermédiaire','Avancé') NOT NULL,
+  `formation_id` int(11) NOT NULL,
+  `formateur_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `cours`
+--
+
+INSERT INTO `cours` (`id`, `nom`, `image`, `description`, `duree`, `niveau`, `formation_id`, `formateur_id`) VALUES
+(2, 'Excel', 'CPA-9266.jpg', 'faire es calcul', 2, 'Intermédiaire', 4, 9);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `course_steps`
+--
+
+CREATE TABLE `course_steps` (
+  `id` int(11) NOT NULL,
+  `course_id` int(11) DEFAULT NULL,
+  `step_number` int(11) DEFAULT NULL,
+  `content` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `course_steps`
+--
+
+INSERT INTO `course_steps` (`id`, `course_id`, `step_number`, `content`) VALUES
+(4, 2, 1, 'gratuitementfffffffffffffffffffffffffffffff'),
+(5, 2, 2, 'je suis avec toi'),
+(6, 2, 3, 'fonce'),
+(7, 2, 4, 'vas'),
+(8, 2, 5, 'aussi bonne mlecteur'),
+(9, 2, 6, 'aller');
 
 -- --------------------------------------------------------
 
@@ -210,7 +259,8 @@ INSERT INTO `inscriptions` (`id`, `user_id`, `formation_id`, `date_inscription`)
 (11, 11, 1, '2024-07-10 15:56:17'),
 (12, 11, 2, '2024-07-14 21:24:04'),
 (13, 20, 3, '2024-07-17 16:22:51'),
-(14, 21, 4, '2024-07-17 16:25:47');
+(14, 21, 4, '2024-07-17 16:25:47'),
+(15, 6, 6, '2024-07-18 14:40:50');
 
 -- --------------------------------------------------------
 
@@ -278,6 +328,19 @@ CREATE TABLE `password_resets` (
 INSERT INTO `password_resets` (`id`, `email`, `token`, `created_at`) VALUES
 (1, 'marry@gmail.com', '634281438e32e18f9c41e8701814b02c5e8d32ccadda50504bf380913d727c713c587a42701c9ea28a34f2b4bf441262f5b8', '2024-07-15 19:27:28'),
 (2, 'etonakambio@gmail.com', 'a6381c8fd320db10288167a49efb82e5b4f386cccaf47b8518870ae1a9d539339b0a76b3f18698884ba387cf251bca4074e3', '2024-07-15 19:38:42');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `progress`
+--
+
+CREATE TABLE `progress` (
+  `id` int(11) NOT NULL,
+  `student_id` int(11) DEFAULT NULL,
+  `course_id` int(11) DEFAULT NULL,
+  `current_step` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -586,6 +649,21 @@ ALTER TABLE `annonces`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Index pour la table `cours`
+--
+ALTER TABLE `cours`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `formation_id` (`formation_id`),
+  ADD KEY `formateur_id` (`formateur_id`);
+
+--
+-- Index pour la table `course_steps`
+--
+ALTER TABLE `course_steps`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `course_id` (`course_id`);
+
+--
 -- Index pour la table `discussions`
 --
 ALTER TABLE `discussions`
@@ -651,6 +729,14 @@ ALTER TABLE `notif_all`
 --
 ALTER TABLE `password_resets`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Index pour la table `progress`
+--
+ALTER TABLE `progress`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `student_id` (`student_id`),
+  ADD KEY `course_id` (`course_id`);
 
 --
 -- Index pour la table `questions`
@@ -760,6 +846,18 @@ ALTER TABLE `annonces`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT pour la table `cours`
+--
+ALTER TABLE `cours`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT pour la table `course_steps`
+--
+ALTER TABLE `course_steps`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
 -- AUTO_INCREMENT pour la table `discussions`
 --
 ALTER TABLE `discussions`
@@ -793,7 +891,7 @@ ALTER TABLE `grades`
 -- AUTO_INCREMENT pour la table `inscriptions`
 --
 ALTER TABLE `inscriptions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT pour la table `notifications`
@@ -812,6 +910,12 @@ ALTER TABLE `notif_all`
 --
 ALTER TABLE `password_resets`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT pour la table `progress`
+--
+ALTER TABLE `progress`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `questions`
@@ -884,6 +988,19 @@ ALTER TABLE `trainers`
 --
 
 --
+-- Contraintes pour la table `cours`
+--
+ALTER TABLE `cours`
+  ADD CONSTRAINT `cours_ibfk_1` FOREIGN KEY (`formation_id`) REFERENCES `formations` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `cours_ibfk_2` FOREIGN KEY (`formateur_id`) REFERENCES `trainers` (`id`) ON DELETE CASCADE;
+
+--
+-- Contraintes pour la table `course_steps`
+--
+ALTER TABLE `course_steps`
+  ADD CONSTRAINT `course_steps_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `cours` (`id`);
+
+--
 -- Contraintes pour la table `discussions`
 --
 ALTER TABLE `discussions`
@@ -919,6 +1036,13 @@ ALTER TABLE `inscriptions`
 --
 ALTER TABLE `notifications`
   ADD CONSTRAINT `notifications_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`);
+
+--
+-- Contraintes pour la table `progress`
+--
+ALTER TABLE `progress`
+  ADD CONSTRAINT `progress_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`),
+  ADD CONSTRAINT `progress_ibfk_2` FOREIGN KEY (`course_id`) REFERENCES `cours` (`id`);
 
 --
 -- Contraintes pour la table `questions`
