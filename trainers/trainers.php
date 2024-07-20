@@ -285,7 +285,7 @@ if (isset($_POST['restore_answer'])) {
                         </li>
                         
                         <li class="nav-item">
-                            <a class="nav-link" href="../forum/forum.php" target="_blank">Forum</a>
+                            <a class="nav-link" href="../forum/forum.php">Forum</a>
                         </li>
                     </ul>
                     <!-- Inclure l'avatar à droite -->

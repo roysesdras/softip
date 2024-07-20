@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : ven. 19 juil. 2024 à 01:23
+-- Généré le : sam. 20 juil. 2024 à 22:46
 -- Version du serveur : 10.4.27-MariaDB
 -- Version de PHP : 7.4.33
 
@@ -80,7 +80,7 @@ CREATE TABLE `cours` (
 --
 
 INSERT INTO `cours` (`id`, `nom`, `image`, `description`, `duree`, `niveau`, `formation_id`, `formateur_id`) VALUES
-(2, 'Excel', 'CPA-9266.jpg', 'faire es calcul', 2, 'Intermédiaire', 4, 9);
+(2, 'Excel', 'CPA-9266.jpg', 'faire es calcul est excellent moyen de ....', 2, 'Intermédiaire', 4, 9);
 
 -- --------------------------------------------------------
 
@@ -100,12 +100,12 @@ CREATE TABLE `course_steps` (
 --
 
 INSERT INTO `course_steps` (`id`, `course_id`, `step_number`, `content`) VALUES
-(4, 2, 1, 'gratuitementfffffffffffffffffffffffffffffff'),
-(5, 2, 2, 'je suis avec toi'),
-(6, 2, 3, 'fonce'),
-(7, 2, 4, 'vas'),
-(8, 2, 5, 'aussi bonne mlecteur'),
-(9, 2, 6, 'aller');
+(78, 2, 1, 'gratuitementfffffffffffffffffffffffffffffff et le papa'),
+(79, 2, 2, 'je suis avec toi'),
+(80, 2, 3, 'fonce'),
+(81, 2, 4, 'vas'),
+(82, 2, 5, 'aussi bonne mlecteur'),
+(83, 2, 6, 'aller');
 
 -- --------------------------------------------------------
 
@@ -138,7 +138,9 @@ INSERT INTO `discussions` (`id`, `topic_id`, `student_id`, `message`, `created_a
 (24, 2, 20, 'c\'est une tres belle initiative\r\n', '2024-07-17 16:37:07', NULL, NULL),
 (25, 2, 20, 'oui', '2024-07-17 16:37:44', NULL, NULL),
 (26, 2, NULL, 'tu peux le fair\r\n', '2024-07-17 16:39:41', 9, NULL),
-(27, 1, NULL, 'la vitesse', '2024-07-17 16:54:16', 9, NULL);
+(27, 1, NULL, 'la vitesse', '2024-07-17 16:54:16', 9, NULL),
+(28, 2, NULL, '<p>les minuteurs sont là 😊</p>', '2024-07-20 19:17:34', 9, NULL),
+(29, 2, NULL, '<p>😂😂😂😂😂😂😂</p>', '2024-07-20 19:28:06', 9, NULL);
 
 -- --------------------------------------------------------
 
@@ -500,6 +502,30 @@ CREATE TABLE `results` (
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `reviews`
+--
+
+CREATE TABLE `reviews` (
+  `id` int(11) NOT NULL,
+  `course_id` int(11) NOT NULL,
+  `student_id` int(11) NOT NULL,
+  `rating` int(11) DEFAULT NULL CHECK (`rating` >= 1 and `rating` <= 5),
+  `comment` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `reviews`
+--
+
+INSERT INTO `reviews` (`id`, `course_id`, `student_id`, `rating`, `comment`, `created_at`) VALUES
+(7, 2, 21, 4, 'tres bien mr', '2024-07-20 12:01:01'),
+(8, 2, 21, 5, 'banane plantin', '2024-07-20 12:10:28'),
+(9, 2, 21, 3, 'je penses que vou devrirez revoir unpeu votre maniere  d\'expliquer', '2024-07-20 13:30:16');
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `sessions`
 --
 
@@ -606,7 +632,8 @@ CREATE TABLE `topics` (
 
 INSERT INTO `topics` (`id`, `title`, `description`, `created_by`, `created_at`) VALUES
 (1, 'les droit de l\'enfant', 'que pensez vous des droits des enfants', 6, '2024-07-13 13:25:33'),
-(2, 'le cours sur le technique', 'le chapitre de la guerre des trans', 6, '2024-07-13 16:56:05');
+(2, 'le cours sur le technique', 'le chapitre de la guerre des trans', 6, '2024-07-13 16:56:05'),
+(3, 'CSI Mobile', 'Chantier de solidarité internatial', NULL, '2024-07-20 20:14:35');
 
 -- --------------------------------------------------------
 
@@ -786,6 +813,14 @@ ALTER TABLE `results`
   ADD KEY `student_id` (`student_id`);
 
 --
+-- Index pour la table `reviews`
+--
+ALTER TABLE `reviews`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `course_id` (`course_id`),
+  ADD KEY `student_id` (`student_id`);
+
+--
 -- Index pour la table `sessions`
 --
 ALTER TABLE `sessions`
@@ -849,19 +884,19 @@ ALTER TABLE `annonces`
 -- AUTO_INCREMENT pour la table `cours`
 --
 ALTER TABLE `cours`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT pour la table `course_steps`
 --
 ALTER TABLE `course_steps`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=84;
 
 --
 -- AUTO_INCREMENT pour la table `discussions`
 --
 ALTER TABLE `discussions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT pour la table `evaluations`
@@ -948,6 +983,12 @@ ALTER TABLE `resources`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
+-- AUTO_INCREMENT pour la table `reviews`
+--
+ALTER TABLE `reviews`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
 -- AUTO_INCREMENT pour la table `sessions`
 --
 ALTER TABLE `sessions`
@@ -975,7 +1016,7 @@ ALTER TABLE `student_resources`
 -- AUTO_INCREMENT pour la table `topics`
 --
 ALTER TABLE `topics`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pour la table `trainers`
@@ -1085,6 +1126,13 @@ ALTER TABLE `resources`
 ALTER TABLE `results`
   ADD CONSTRAINT `results_ibfk_1` FOREIGN KEY (`quiz_id`) REFERENCES `quizzes` (`id`),
   ADD CONSTRAINT `results_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`);
+
+--
+-- Contraintes pour la table `reviews`
+--
+ALTER TABLE `reviews`
+  ADD CONSTRAINT `reviews_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `cours` (`id`),
+  ADD CONSTRAINT `reviews_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`);
 
 --
 -- Contraintes pour la table `sessions`

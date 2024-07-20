@@ -10,7 +10,7 @@
             color: #333;
         }
         .container {
-            margin-top: 30px;
+           
             flex: 1; /* Permet au conteneur de prendre tout l'espace disponible */
         }
 
