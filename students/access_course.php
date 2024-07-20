@@ -55,4 +55,5 @@ if (!empty($formation_ids)) {
         <p>Aucun cours disponible pour les formations inscrites.</p>
     <?php endif; ?>
 </body>
+
 </html>

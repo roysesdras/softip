@@ -253,8 +253,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                 </div>
             </div>
-            <button type="button" class="btn btn-warning" onclick="addStep()">Ajouter une autre étape</button>
-            <button type="submit" class="btn btn-success">Ajouter le cours et les étapes</button>
+            <button type="button" class="btn btn-warning mb-3" onclick="addStep()">Ajouter une autre étape</button>
+            <button type="submit" class="btn btn-success mb-3">Enrégistré</button>
         </form>
         <div class="quitter mb-4">
             <a href="../trainers/trainers.php" style="font-size: 20px;">Quitter</a>

@@ -3,7 +3,7 @@ session_start();
 include('../admin/config.php');
 
 if (!isset($_SESSION['trainer_id'])) {
-    header('Location: ../trainers/login_trainer.php');
+    echo json_encode(['success' => false, 'message' => 'Non autorisé.']);
     exit;
 }
 
@@ -11,12 +11,14 @@ $trainer_id = $_SESSION['trainer_id'];
 $course_id = isset($_GET['id']) ? $_GET['id'] : null;
 
 if (!$course_id) {
-    die("Identifiant du cours manquant.");
+    echo json_encode(['success' => false, 'message' => 'Identifiant du cours manquant.']);
+    exit;
 }
 
 // Vérifier si l'objet PDO est bien créé
 if (!$pdo) {
-    die("Erreur de connexion à la base de données");
+    echo json_encode(['success' => false, 'message' => 'Erreur de connexion à la base de données']);
+    exit;
 }
 
 try {
@@ -26,7 +28,8 @@ try {
     $course = $stmt_check->fetch();
 
     if (!$course) {
-        die("Cours non trouvé ou vous n'avez pas la permission de le supprimer.");
+        echo json_encode(['success' => false, 'message' => 'Cours non trouvé ou vous n\'avez pas la permission de le supprimer.']);
+        exit;
     }
 
     // Supprimer les étapes associées au cours
@@ -43,9 +46,9 @@ try {
         unlink($image_path);
     }
 
-    echo "Le cours a été supprimé avec succès.";
+    echo json_encode(['success' => true, 'message' => 'Le cours a été supprimé avec succès.']);
 } catch (PDOException $e) {
     // Gérer les erreurs PDO
-    echo "Erreur PDO : " . $e->getMessage();
+    echo json_encode(['success' => false, 'message' => 'Erreur PDO : ' . $e->getMessage()]);
 }
 ?>

@@ -144,11 +144,11 @@ try {
 </head>
 <body>
     <div class="container">
-        <div class="course-form">
+        <div class="course-form mb-4">
             <h1>Modifier le Cours</h1>
             <form action="" method="post" enctype="multipart/form-data">
                 <div class="mb-3">
-                    <label for="nom" class="form-label">Nom du cours :</label>
+                    <label for="nom" class="form-label">Titre du cours :</label>
                     <input type="text" id="nom" name="nom" class="form-control" value="<?php echo htmlspecialchars($course['nom']); ?>" required>
                 </div>
 
@@ -232,11 +232,14 @@ try {
                 });
                 </script>
 
-                <button type="button" id="add-step" class="btn btn-secondary btn-add-step">Ajouter une étape</button><br><br>
+                <button type="button" id="add-step" class="btn btn-outline-secondary btn-add-step">Ajouter une étape</button><br><br>
                 
-                <input type="submit" value="Modifier le cours" class="btn btn-primary">
+                <input type="submit" value="Enrégistré les modifications" class="btn btn-warning">
             </form>
         </div>
+            <div class="quitter mb-4">
+                <a href="../trainers/trainers.php" style="font-size: 20px;">Quitter les modifications</a>
+            </div>
     </div>
 
     <script>
