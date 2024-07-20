@@ -44,8 +44,8 @@ if (!empty($formation_ids)) {
         <ul>
         <?php foreach ($courses as $course): ?>
             <li>
-                <h3><?php echo htmlspecialchars($course['nom']); ?></h3>
-                <p><?php echo htmlspecialchars($course['description']); ?></p>
+                <h3><?php echo ($course['nom']); ?></h3>
+                <p><?php echo ($course['description']); ?></p>
                 <img src="../avatar_img<?php echo htmlspecialchars($course['image']); ?>" alt="Image du cours" style="max-width: 200px;">
                 <a href="view_course.php?course_id=<?php echo $course['id']; ?>">Accéder au cours</a>
             </li>

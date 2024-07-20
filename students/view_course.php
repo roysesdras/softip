@@ -74,7 +74,7 @@ $progress = ($total_steps > 0) ? ($current_step / $total_steps) * 100 : 0;
         <div class="progress-bar-fill"><?= round($progress, 2) ?>%</div>
     </div>
     <div>
-        <?= nl2br(htmlspecialchars($step_content)) ?>
+        <?= nl2br(($step_content)) ?>
     </div>
     <div>
         <?php if ($current_step > 1): ?>

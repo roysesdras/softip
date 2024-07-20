@@ -284,6 +284,9 @@ if (isset($_POST['restore_answer'])) {
                             <a class="nav-link" href="../cours/mes_cours_formateur.php" target="_blanck">Gérer mes cours</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="trainer_messages.html" target="_blanck">messagerie</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="../forum/forum.php" target="_blank">Forum</a>
                         </li>
                     </ul>
