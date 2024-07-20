@@ -352,6 +352,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             window.scrollTo({top: 0, behavior: 'smooth'});
         });
     </script>
+
+    <?php require_once ('../inclusion/footer_2.php'); ?>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

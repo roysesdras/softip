@@ -281,11 +281,9 @@ if (isset($_POST['restore_answer'])) {
                             <a class="nav-link" href="../cours/insert_cours.php" target="_blanck">Ajouter Cours</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../cours/mes_cours_formateur.php" target="_blanck">Gérer mes cours</a>
+                            <a class="nav-link" href="../cours/mes_cours_formateur.php" target="_blanck">Gérer mes Cours</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="trainer_messages.html" target="_blanck">messagerie</a>
-                        </li>
+                        
                         <li class="nav-item">
                             <a class="nav-link" href="../forum/forum.php" target="_blank">Forum</a>
                         </li>
@@ -698,29 +696,7 @@ if (isset($_POST['restore_answer'])) {
 
 
 
-    <a href="#" class="back-to-top d-flex align-items-center justify-content-center">
-        <i class="bi bi-arrow-up-short"></i>
-    </a>
-
-    <script>
-      // Sélectionne l'élément .back-to-top
-      let backToTopButton = document.querySelector('.back-to-top');
-
-      // Ajoute un écouteur d'événement au défilement de la fenêtre
-      window.addEventListener('scroll', () => {
-          if (window.scrollY > 100) {
-          backToTopButton.classList.add('active');
-          } else {
-          backToTopButton.classList.remove('active');
-          }
-      });
-
-      // Ajoute un écouteur d'événement pour cliquer sur le bouton
-      backToTopButton.addEventListener('click', (e) => {
-          e.preventDefault();
-          window.scrollTo({top: 0, behavior: 'smooth'});
-      });
-    </script>
+    <?php require_once ('../inclusion/footer_2.php'); ?>
 
 
 

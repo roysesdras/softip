@@ -196,38 +196,6 @@ div a {
     border-radius: 5px;
 }
 
-.back-to-top {
-    position     : fixed;
-    visibility   : hidden;
-    opacity      : 0;
-    right        : 15px;
-    /* Change from right to left */
-    bottom       : 15px;
-    z-index      : 996;
-    background   : #033e60;
-    width        : 40px;
-    height       : 40px;
-    border-radius: 50px;
-    transition   : all 0.4s;
-    box-shadow   : rgba(0, 0, 0, 0.35) 0px 5px 15px;
-}
-
-.back-to-top i {
-    font-size  : 28px;
-    color      : #fff;
-    line-height: 0;
-}
-
-.back-to-top:hover {
-    background: #033e60;
-    color     : #fff;
-}
-
-.back-to-top.active {
-    visibility: visible;
-    opacity   : 1;
-}
-
 .evene {
     padding: 0.5em;
 }

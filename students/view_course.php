@@ -53,11 +53,12 @@ $progress = ($total_steps > 0) ? ($current_step / $total_steps) * 100 : 0;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= htmlspecialchars($course['nom']) ?> - cours</title>
+    <title><?= htmlspecialchars($course['nom']) ?> - Cours</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.9.0/font/bootstrap-icons.min.css">
     <link href="../assets/img/favicon.png" rel="icon">
     <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+   
 
     <style>
         body {
@@ -216,7 +217,7 @@ $progress = ($total_steps > 0) ? ($current_step / $total_steps) * 100 : 0;
     
 
     
-
+    <?php require_once ('../inclusion/footer_2.php'); ?>
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

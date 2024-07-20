@@ -20,13 +20,9 @@ try {
     $stmt->execute([$trainer_id]);
     $courses = $stmt->fetchAll();
 
-    if ($courses) {
-        $hasCourses = true;
-    } else {
-        $hasCourses = false;
-    }
+    $hasCourses = !empty($courses);
 
-    // Récupérer les avis pour un cours spécifique
+    // Récupérer tous les avis pour un cours spécifique
     $course_id = 2; // Identifiant du cours
 
     $sql = "SELECT r.rating, r.comment, s.username, r.created_at
@@ -38,6 +34,10 @@ try {
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['course_id' => $course_id]);
     $reviews = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Vérifier s'il y a plus d'avis
+    $total_reviews = count($reviews);
+    $more_reviews_available = $total_reviews > 5;
 
 } catch (PDOException $e) {
     // Gérer les erreurs PDO
@@ -104,18 +104,23 @@ try {
             margin-bottom: 15px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-
         .review h5 {
             margin-top: 0;
             font-size: 1.25rem;
             margin-bottom: 4px; /* Réduit l'espace sous la note */
         }
-
         .review p {
             margin: 0 0 0px 0; /* Réduit l'espace entre le commentaire et la date */
             font-size: 1.1rem;
         }
-
+        .hidden {
+            display: none;
+        }
+        .more-reviews {
+            cursor: pointer;
+            color: #007bff;
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -173,19 +178,24 @@ try {
                 }
             </script>
 
-
             </div>
-            <div class="col-md-3 reviews-section" >
+            <div class="col-md-3 reviews-section mb-4">
                 <div class="position-sticky" style="top: 2rem">
                     <h4>Notes et avis des étudiants</h4>
                     <?php 
                         if ($reviews) {
+                            $review_count = 0;
                             foreach ($reviews as $row) {
-                                echo "<div class='review'>";
+                                $review_count++;
+                                $hidden_class = ($review_count > 5) ? 'hidden' : '';
+                                echo "<div class='review $hidden_class'>";
                                 echo "<h5>Note: " . htmlspecialchars($row['rating']) . "/5</h5>";
                                 echo "<p><b>Avis:</b> " . htmlspecialchars($row['comment']) . "</p>";
                                 echo "<p><b>De:</b> " . htmlspecialchars($row['username']) . " le " . htmlspecialchars($row['created_at']) . "</p>";
                                 echo "</div>";
+                            }
+                            if ($more_reviews_available) {
+                                echo "<div class='more-reviews' id='more-reviews'>Voir plus d'avis</div>";
                             }
                         } else {
                             echo "<div class='alert alert-info' role='alert'>Aucun avis pour ce cours.</div>";
@@ -198,6 +208,19 @@ try {
             </div>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#more-reviews').click(function() {
+                $('.review.hidden').removeClass('hidden');
+                $(this).hide(); // Cache le lien "Voir plus"
+            });
+        });
+    </script>
+
+
+
+    <?php require_once ('../inclusion/footer_2.php'); ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
