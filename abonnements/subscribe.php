@@ -35,9 +35,21 @@ $_SESSION['csrf_token'] = $csrf_token;
     <div class="container mt-5">
         <h2>S'abonner à une formation</h2>
         <form id="subscriptionForm">
+            <div class="mb-3">
+                <label for="name" class="form-label">Nom Complet:</label>
+                <input type="text" class="form-control" id="name" name="name" value="<?php echo htmlspecialchars($_SESSION['student_username']); ?>" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email:</label>
+                <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($_SESSION['student_email']); ?>" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="phone_number" class="form-label">Numéro:</label>
+                <input type="text" class="form-control" id="phone_number" name="phone_number" value="<?php echo htmlspecialchars($_SESSION['student_phone']); ?>" readonly>
+            </div>
             <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrf_token); ?>">
             <div class="mb-3">
-                <label for="formation" class="form-label">Formation:</label>
+                <label for="formation" class="form-label">Sélectionnez une Formation:</label>
                 <select class="form-control" id="formation" name="formation_id" required>
                     <?php foreach ($formations as $formation): ?>
                         <option value="<?php echo htmlspecialchars($formation['id']); ?>" data-price="<?php echo htmlspecialchars($formation['price']); ?>">
@@ -55,6 +67,7 @@ $_SESSION['csrf_token'] = $csrf_token;
             </div>
             <button type="button" class="btn btn-primary btn-buy">S'abonner</button>
         </form>
+
     </div>
 
     <!-- Inclure le script du widget KKiaPay -->
