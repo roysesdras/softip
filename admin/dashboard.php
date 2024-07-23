@@ -383,38 +383,18 @@ $notifications = $stmt_notifications->fetchAll();
                     </div>
                 </div>
             </div>
-
+            <div class="log text-end">
+                <a href="logout.php" class="btn btn-outline-danger mb-3">Déconnexion</a>
+            </div>
+            
         </div>
 
 
-
-        <a href="#" class="back-to-top d-flex align-items-center justify-content-center">
-            <i class="bi bi-arrow-up-short"></i>
-        </a>
-
-        <script>
-        // Sélectionne l'élément .back-to-top
-        let backToTopButton = document.querySelector('.back-to-top');
-
-        // Ajoute un écouteur d'événement au défilement de la fenêtre
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 100) {
-            backToTopButton.classList.add('active');
-            } else {
-            backToTopButton.classList.remove('active');
-            }
-        });
-
-        // Ajoute un écouteur d'événement pour cliquer sur le bouton
-        backToTopButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.scrollTo({top: 0, behavior: 'smooth'});
-        });
-        </script>
-
-
+        <?php require_once ('../inclusion/footer_2.php'); ?>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>
+
+        
     </body>
 </html>

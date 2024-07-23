@@ -58,11 +58,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="../assets/img/favicon.png" rel="icon">
     <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
-    <!-- meta for og.graph -->
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="sternaafrica" />
-    <title>Créer un compte Etudiant</title>
-
     <!-- all css -->
     <!-- <link rel="canonical" href="https://sternaafrica.org/"> -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">

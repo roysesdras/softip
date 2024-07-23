@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['student_username'] = $student['username'];
         $_SESSION['student_email'] = $student['email'];
         $_SESSION['student_phone'] = $student['phone_number'];
-        header('Location: inscription_formation.php'); // Redirection vers le tableau de bord des étudiants
+        header('Location: ../abonnements/subscribe.php'); // Redirection vers le tableau de bord des étudiants
         exit; // Arrête l'exécution du script après la redirection
     } else {
         $_SESSION['error_message'] = 'Nom d\'utilisateur ou mot de passe incorrect';
@@ -112,6 +112,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 
 
+    <?php require_once ('../inclusion/footer_2.php'); ?>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

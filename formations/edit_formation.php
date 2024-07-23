@@ -13,9 +13,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $titre = htmlspecialchars($_POST['titre']);
     $description = $_POST['description']; // Ne pas échapper ici, Summernote gère le HTML
     $image_url = htmlspecialchars($_POST['image_url']);
+    $price = htmlspecialchars($_POST['price']); // Ajout du prix
 
-    $stmt = $pdo->prepare("UPDATE formations SET titre = ?, description = ?, image_url = ? WHERE id = ?");
-    $stmt->execute([$titre, $description, $image_url, $id]);
+    $stmt = $pdo->prepare("UPDATE formations SET titre = ?, description = ?, image_url = ?, price = ? WHERE id = ?");
+    $stmt->execute([$titre, $description, $image_url, $price, $id]);
 
     $_SESSION['message'] = 'Formation modifiée avec succès';
     header('Location: ../admin/dashboard.php');
@@ -54,11 +55,15 @@ if (!$formation) {
             </div>
             <div class="mb-3">
                 <label for="description" class="form-label">Description</label>
-                <textarea class="form-control" id="description" name="description" required><?php echo $formation['description']; ?></textarea>
+                <textarea class="form-control" id="description" name="description" required><?php echo htmlspecialchars($formation['description']); ?></textarea>
             </div>
             <div class="mb-3">
                 <label for="image_url" class="form-label">URL de l'image</label>
                 <input type="text" class="form-control" id="image_url" name="image_url" value="<?php echo htmlspecialchars($formation['image_url']); ?>" required>
+            </div>
+            <div class="mb-3">
+                <label for="price" class="form-label">Prix (FCFA)</label>
+                <input type="number" step="0.01" class="form-control" id="price" name="price" value="<?php echo htmlspecialchars($formation['price']); ?>" required>
             </div>
             <button type="submit" class="btn btn-warning">Mise à jour</button>
         </form>

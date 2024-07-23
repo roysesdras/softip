@@ -6,9 +6,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $titre = htmlspecialchars($_POST['titre']);
     $description = htmlspecialchars($_POST['description']);
     $image_url = htmlspecialchars($_POST['image_url']);
+    $price = htmlspecialchars($_POST['price']);
 
-    $stmt = $pdo->prepare("INSERT INTO formations (titre, description, image_url) VALUES (?, ?, ?)");
-    $stmt->execute([$titre, $description, $image_url]);
+    $stmt = $pdo->prepare("INSERT INTO formations (titre, description, image_url, price) VALUES (?, ?, ?, ?)");
+    $stmt->execute([$titre, $description, $image_url, $price]);
 
     $_SESSION['message'] = 'Formation ajoutée avec succès';
     header('Location: ../admin/dashboard.php');
@@ -43,6 +44,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="mb-3">
                 <label for="image_url" class="form-label">URL de l'image</label>
                 <input type="url" class="form-control" id="image_url" name="image_url" required>
+            </div>
+            <div class="mb-3">
+                <label for="price" class="form-label">Prix (FCFA)</label>
+                <input type="number" step="0.01" class="form-control" id="price" name="price" required>
             </div>
             <button type="submit" class="btn btn-primary">Ajouter</button>
         </form>

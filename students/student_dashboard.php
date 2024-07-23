@@ -24,15 +24,33 @@ if (!$student) {
     exit;
 }
 
-// Récupérer les formations auxquelles l'étudiant est inscrit
-$stmt = $pdo->prepare("SELECT formations.id, formations.titre, formations.description FROM formations 
-                        INNER JOIN inscriptions ON formations.id = inscriptions.formation_id 
-                        WHERE inscriptions.user_id = ?");
-$stmt->execute([$student_id]);
-$formations = $stmt->fetchAll();
+// Récupérer les abonnements de l'étudiant avec le titre de la formation
+$stmt = $pdo->prepare("
+    SELECT 
+        a.id, 
+        f.titre AS formation_titre, 
+        a.start_date, 
+        a.end_date, 
+        a.price, 
+        a.status, 
+        a.transaction_details
+    FROM abonnements a
+    JOIN formations f ON a.formation_id = f.id
+    WHERE a.student_id = :student_id
+");
+$stmt->bindParam(':student_id', $student_id, PDO::PARAM_INT);
+$stmt->execute();
+$subscriptions = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+if (!$subscriptions) {
+    $subscriptions = []; // Initialiser comme tableau vide si aucun résultat
+}
+
+
 
 // Récupérer les IDs des formations
-$formation_ids = array_column($formations, 'id');
+$formation_ids = array_column($subscriptions, 'formation_id');
+
 
 // Récupérer les ressources associées aux formations de l'étudiant
 if (!empty($formation_ids)) {
@@ -60,15 +78,22 @@ if (!empty($formation_ids)) {
 
 // Récupérer les résultats des quiz filtrés par formation
 $stmt_results = $pdo->prepare("
-    SELECT quizzes.titre, SUM(IF(questions.correct_option = student_answers.answer, 1, 0)) AS score, MAX(student_answers.submitted_at) AS date_taken
-    FROM quizzes
-    JOIN questions ON quizzes.id = questions.quiz_id
-    LEFT JOIN student_answers ON questions.id = student_answers.question_id AND student_answers.student_id = ?
-    WHERE quizzes.formation_id IN ($in_query)
-    GROUP BY quizzes.id
+SELECT 
+    quizzes.titre, 
+    SUM(IF(questions.correct_option = student_answers.answer, 1, 0)) AS score, 
+    MAX(student_answers.submitted_at) AS date_taken
+FROM quizzes
+JOIN questions ON quizzes.id = questions.quiz_id
+LEFT JOIN student_answers ON questions.id = student_answers.question_id AND student_answers.student_id = ?
+WHERE quizzes.formation_id IN ($in_query)
+GROUP BY quizzes.id
 ");
-$stmt_results->execute(array_merge([$student_id], $formation_ids));
-$results = $stmt_results->fetchAll();
+
+// Fusionner le tableau contenant $student_id et les IDs de formation
+$params = array_merge([$student_id], $formation_ids);
+
+$stmt_results->execute($params);
+$results = $stmt_results->fetchAll(PDO::FETCH_ASSOC);
 
 // Récupérer les quizzes disponibles filtrés par formation
 $stmt_quizzes = $pdo->prepare("
@@ -421,39 +446,39 @@ $notifications = $stmt_notifications->fetchAll();
 
         <!-- Section des formations -->
         <div class="card mb-4 shadow p-2">
-            <div class="card-body">
-                <h4 class="card-title">Vos Formations Inscrites</h4>
-                <div class="table-responsive">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Titre</th>
-                                <th>Description</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($formations as $formation): ?>
-                                <tr>
-                                    <td><?php echo htmlspecialchars($formation['titre']); ?></td>
-                                    <td>
-                                        <?php 
-                                            $fullDescription = $formation['description'];
-                                            $shortDescription = substr(strip_tags($fullDescription), 0, 100);
-                                        ?>
-                                        <span class="short-description"><?php echo $shortDescription; ?></span>
-                                        <?php if (strlen(strip_tags($fullDescription)) > 100): ?>
-                                            <span class="ellipsis">...</span>
-                                            <span class="full-description" style="display: none;"><?php echo substr($fullDescription, 100); ?></span>
-                                            <a href="#" class="toggle-description">Voir plus</a>
-                                        <?php endif; ?>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+    <div class="card-body">
+        <h4 class="card-title">Vos Abonnements</h4>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Formation ID</th>
+                        <th>Date de Début</th>
+                        <th>Date de Fin</th>
+                        <th>Prix</th>
+                        <th>Status</th>
+                        <th>Détails de la Transaction</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($subscriptions as $subscription): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($subscription['id']); ?></td>
+                            <td><?php echo htmlspecialchars($subscription['formation_titre']); ?></td>
+                            <td><?php echo htmlspecialchars($subscription['start_date']); ?></td>
+                            <td><?php echo htmlspecialchars($subscription['end_date']); ?></td>
+                            <td><?php echo htmlspecialchars($subscription['price']); ?> FCFA</td>
+                            <td><?php echo htmlspecialchars($subscription['status']); ?></td>
+                            <td><?php echo htmlspecialchars($subscription['transaction_details']); ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
         </div>
+    </div>
+</div>
+
 
         <script>
         document.addEventListener('DOMContentLoaded', function() {
