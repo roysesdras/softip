@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : sam. 20 juil. 2024 à 22:46
+-- Généré le : mar. 23 juil. 2024 à 21:48
 -- Version du serveur : 10.4.27-MariaDB
 -- Version de PHP : 7.4.33
 
@@ -20,6 +20,36 @@ SET time_zone = "+00:00";
 --
 -- Base de données : `soft_ip`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `abonnements`
+--
+
+CREATE TABLE `abonnements` (
+  `id` int(11) NOT NULL,
+  `student_id` int(11) NOT NULL,
+  `formation_id` int(11) NOT NULL,
+  `start_date` date NOT NULL,
+  `end_date` date NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `status` enum('Actif','Expiré') NOT NULL,
+  `payment_method` enum('KKiaPay','FedaPay') NOT NULL,
+  `transaction_details` text NOT NULL,
+  `auto_renewal` tinyint(1) NOT NULL DEFAULT 0,
+  `notifications_sent` tinyint(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `abonnements`
+--
+
+INSERT INTO `abonnements` (`id`, `student_id`, `formation_id`, `start_date`, `end_date`, `price`, `status`, `payment_method`, `transaction_details`, `auto_renewal`, `notifications_sent`) VALUES
+(2, 21, 2, '2024-07-23', '2024-08-22', '5.00', 'Actif', 'KKiaPay', 'Paiement réussi via KKiaPay', 0, 0),
+(3, 21, 3, '2024-07-23', '2024-08-22', '3.00', 'Actif', 'KKiaPay', 'Paiement réussi via KKiaPay', 0, 0),
+(4, 21, 3, '2024-07-23', '2024-08-22', '3.00', 'Actif', 'KKiaPay', 'Paiement réussi via KKiaPay', 0, 0),
+(5, 21, 4, '2024-07-23', '2024-08-22', '2.00', 'Actif', 'KKiaPay', 'Paiement réussi via KKiaPay', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -189,20 +219,21 @@ CREATE TABLE `formations` (
   `titre` varchar(255) NOT NULL,
   `description` text DEFAULT NULL,
   `image_url` varchar(255) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `price` decimal(10,2) NOT NULL DEFAULT 0.00
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `formations`
 --
 
-INSERT INTO `formations` (`id`, `titre`, `description`, `image_url`, `created_at`) VALUES
-(1, 'cyber sécurité', 'la sécurité avant tout est tout est toutest toutest toutest toutest toutest toutest toutest toutest toutest toutest toutest toutest toutest toutest toutest toutest toutest toutest tout un', 'https://i.postimg.cc/VkwgqjMg/OIP-3.jpg', '2024-07-02 12:32:50'),
-(2, 'Développement Web', '<p style=\"text-align: left;\">Cette formation complète en développement web vous guide à travers les bases jusqu\'aux techniques avancées, idéale pour les débutants et ceux cherchant à approfondir leurs compétences.</p>\r\n\r\n        <h4 class=\"section-title\" style=\"\"><font color=\"#083139\"><b>Objectifs de la Formation</b></font></h4>\r\n        <ul>\r\n            <li style=\"text-align: left;\">Créer des sites web réactifs et interactifs.</li>\r\n            <li style=\"text-align: left;\">Utiliser les principaux langages de programmation web : HTML, CSS, JavaScript.</li>\r\n            <li style=\"text-align: left;\">Maîtriser les frameworks populaires comme Bootstrap, React et Angular.</li>\r\n            <li style=\"text-align: left;\">Développer des applications web backend avec PHP, MySQL, Node.js et Express.</li>\r\n        </ul>\r\n\r\n        <h4 class=\"section-title\" style=\"text-align: left;\"><font color=\"#083139\"><b>Programme de la Formation</b></font></h4>\r\n        <h5 style=\"text-align: left;\"><i><u>Module 1</u> : Introduction au Développement Web</i></h5>\r\n        <ul>\r\n            <li style=\"text-align: left;\">HTML et CSS de base</li>\r\n            <li style=\"text-align: left;\">Principes de la conception web</li>\r\n        </ul>\r\n        <h5 style=\"text-align: left;\"><i><u>Module 2</u> : JavaScript et Programmation Orientée Objet</i></h5>\r\n        <ul>\r\n            <li style=\"text-align: left;\">JavaScript de base et avancé</li>\r\n            <li style=\"text-align: left;\">Manipulation du DOM</li>\r\n        </ul>\r\n        <h5 style=\"text-align: left;\"><i><u>Module 3</u> : Frameworks Frontend</i></h5>\r\n        <ul>\r\n            <li style=\"text-align: left;\">Introduction à React</li>\r\n            <li style=\"text-align: left;\">Utilisation d\'Angular</li><li style=\"text-align: left;\">Utilisation Bootstrap</li>\r\n        </ul>\r\n        <h5 style=\"text-align: left;\"><i><u>Module 4</u> : Développement Backend</i></h5>\r\n        <ul>\r\n            <li style=\"text-align: left;\">PHP</li><li style=\"text-align: left;\">Node.js et Express</li>\r\n            <li style=\"text-align: left;\">Gestion de bases de données avec MySQL</li>\r\n        </ul>\r\n        <h5 style=\"text-align: left;\"><i><u>Module 5</u> : Déploiement et Maintenance</i></h5>\r\n        <ul>\r\n            <li style=\"text-align: left;\">Déploiement d\'applications web</li>\r\n            <li style=\"text-align: left;\">Optimisation et maintenance</li>\r\n        </ul>\r\n\r\n        <h5 class=\"section-title\" style=\"text-align: left;\"><b><font color=\"#083139\"><span style=\"font-size: 24px;\">Prérequis</span></font></b></h5>\r\n        <p style=\"text-align: left;\">Aucune expérience préalable en développement web n\'est requise. Une familiarité avec l\'utilisation de l\'ordinateur et la navigation sur le web est souhaitable.</p>\r\n\r\n        <h4 class=\"section-title\" style=\"text-align: left;\"><b><font color=\"#083139\">Durée et Modalités</font></b></h4>\r\n        <p style=\"text-align: left;\"><i>Durée</i> : 12 semaines (3 mois +1)</p><p style=\"text-align: left;\"><span style=\"background-color: var(--bs-body-bg); font-size: var(--bs-body-font-size); font-weight: var(--bs-body-font-weight); text-align: var(--bs-body-text-align);\"><u><i>Modalité</i></u> : </span></p><ol><li style=\"text-align: left;\"><span style=\"background-color: var(--bs-body-bg); font-size: var(--bs-body-font-size); font-weight: var(--bs-body-font-weight); text-align: var(--bs-body-text-align);\">Formation en ligne avec sessions en direct et accès à des ressources vidéos préenregistrées, des tutoriels et des PDFs.</span></li><li style=\"text-align: left;\"><span style=\"background-color: var(--bs-body-bg); font-size: var(--bs-body-font-size); font-weight: var(--bs-body-font-weight); text-align: var(--bs-body-text-align);\">Formation en présentiel avec session exercices et réalisation</span></li></ol>\r\n\r\n        <h4 class=\"section-title\" style=\"text-align: left;\"><font color=\"#083139\"><b>Évaluation et Certification</b></font></h4>\r\n        <p style=\"text-align: left;\"><i>Évaluation </i>: Projets pratiques, quizz en ligne, examen final.</p>\r\n        <p style=\"text-align: left;\"><i>Certification</i> : Certificat de Compétence en Développement Web décerné à l\'issue de la formation.</p>\r\n\r\n        <h4 class=\"section-title\" style=\"text-align: left;\"><b><font color=\"#083139\">Ressources et Matériel Fournis</font></b></h4>\r\n        <ul>\r\n            <li style=\"text-align: left;\">Accès à une plateforme d\'apprentissage en ligne.</li>\r\n            <li style=\"text-align: left;\">Ressources téléchargeables : e-books, présentations, exercices pratiques, vidéos.</li>\r\n            <li style=\"text-align: left;\">Accès à un forum de discussion pour interaction avec les formateurs et autres étudiants.</li>\r\n        </ul>\r\n\r\n        <h4 class=\"section-title\" style=\"text-align: left;\"><b><font color=\"#083139\">Prix, Modalité et Inscription</font></b></h4>\r\n        <p style=\"text-align: left;\"><i>Prix </i>: 500 € pour l\'ensemble de la formation.</p><p style=\"text-align: left;\"><i>Modalité</i> : payable par tranche (100 000 / mois)</p>', 'https://i.postimg.cc/c4HN9hrq/developpement-web-featured.jpg', '2024-07-02 13:01:34'),
-(3, 'GSM Mobil', 'le Gssm est le fait de reparer les telephone prtable pour leur', 'https://i.postimg.cc/RF83Dh4K/reparation-smartphone-a-wazemmes-lille-centre.jpg', '2024-07-13 20:19:29'),
-(4, 'Bureautique', 'l\'informatique de bureau est une suite d\'enssemble de beaucoup de logicile ', 'https://i.postimg.cc/mkHcf4gq/informatique.jpg', '2024-07-13 20:21:18'),
-(5, 'Audio visuel', 'la formation en audio visuel et l\'un des plus gra', 'https://i.postimg.cc/qRghwyVp/tournage-audiovisuel-preparer-concours.jpg', '2024-07-13 20:22:31'),
-(6, 'Antenne Parabilique', 'l\'installation des antenne parabolique est un sheme', 'https://i.postimg.cc/76ZDjJ4h/parabole1.jpg', '2024-07-13 20:36:10');
+INSERT INTO `formations` (`id`, `titre`, `description`, `image_url`, `created_at`, `price`) VALUES
+(1, 'cyber sécurité', 'la sécurité avant tout est tout est toutest toutest toutest toutest toutest toutest toutest toutest toutest toutest toutest toutest toutest toutest toutest toutest toutest toutest tout un', 'https://i.postimg.cc/VkwgqjMg/OIP-3.jpg', '2024-07-02 12:32:50', '10.00'),
+(2, 'Développement Web', '<p style=\"text-align: left;\">Cette formation complète en développement web vous guide à travers les bases jusqu\'aux techniques avancées, idéale pour les débutants et ceux cherchant à approfondir leurs compétences.</p>\r\n\r\n        <h4 class=\"section-title\" style=\"\"><font color=\"#083139\"><b>Objectifs de la Formation</b></font></h4>\r\n        <ul>\r\n            <li style=\"text-align: left;\">Créer des sites web réactifs et interactifs.</li>\r\n            <li style=\"text-align: left;\">Utiliser les principaux langages de programmation web : HTML, CSS, JavaScript.</li>\r\n            <li style=\"text-align: left;\">Maîtriser les frameworks populaires comme Bootstrap, React et Angular.</li>\r\n            <li style=\"text-align: left;\">Développer des applications web backend avec PHP, MySQL, Node.js et Express.</li>\r\n        </ul>\r\n\r\n        <h4 class=\"section-title\" style=\"text-align: left;\"><font color=\"#083139\"><b>Programme de la Formation</b></font></h4>\r\n        <h5 style=\"text-align: left;\"><i><u>Module 1</u> : Introduction au Développement Web</i></h5>\r\n        <ul>\r\n            <li style=\"text-align: left;\">HTML et CSS de base</li>\r\n            <li style=\"text-align: left;\">Principes de la conception web</li>\r\n        </ul>\r\n        <h5 style=\"text-align: left;\"><i><u>Module 2</u> : JavaScript et Programmation Orientée Objet</i></h5>\r\n        <ul>\r\n            <li style=\"text-align: left;\">JavaScript de base et avancé</li>\r\n            <li style=\"text-align: left;\">Manipulation du DOM</li>\r\n        </ul>\r\n        <h5 style=\"text-align: left;\"><i><u>Module 3</u> : Frameworks Frontend</i></h5>\r\n        <ul>\r\n            <li style=\"text-align: left;\">Introduction à React</li>\r\n            <li style=\"text-align: left;\">Utilisation d\'Angular</li><li style=\"text-align: left;\">Utilisation Bootstrap</li>\r\n        </ul>\r\n        <h5 style=\"text-align: left;\"><i><u>Module 4</u> : Développement Backend</i></h5>\r\n        <ul>\r\n            <li style=\"text-align: left;\">PHP</li><li style=\"text-align: left;\">Node.js et Express</li>\r\n            <li style=\"text-align: left;\">Gestion de bases de données avec MySQL</li>\r\n        </ul>\r\n        <h5 style=\"text-align: left;\"><i><u>Module 5</u> : Déploiement et Maintenance</i></h5>\r\n        <ul>\r\n            <li style=\"text-align: left;\">Déploiement d\'applications web</li>\r\n            <li style=\"text-align: left;\">Optimisation et maintenance</li>\r\n        </ul>\r\n\r\n        <h5 class=\"section-title\" style=\"text-align: left;\"><b><font color=\"#083139\"><span style=\"font-size: 24px;\">Prérequis</span></font></b></h5>\r\n        <p style=\"text-align: left;\">Aucune expérience préalable en développement web n\'est requise. Une familiarité avec l\'utilisation de l\'ordinateur et la navigation sur le web est souhaitable.</p>\r\n\r\n        <h4 class=\"section-title\" style=\"text-align: left;\"><b><font color=\"#083139\">Durée et Modalités</font></b></h4>\r\n        <p style=\"text-align: left;\"><i>Durée</i> : 12 semaines (3 mois +1)</p><p style=\"text-align: left;\"><span style=\"background-color: var(--bs-body-bg); font-size: var(--bs-body-font-size); font-weight: var(--bs-body-font-weight); text-align: var(--bs-body-text-align);\"><u><i>Modalité</i></u> : </span></p><ol><li style=\"text-align: left;\"><span style=\"background-color: var(--bs-body-bg); font-size: var(--bs-body-font-size); font-weight: var(--bs-body-font-weight); text-align: var(--bs-body-text-align);\">Formation en ligne avec sessions en direct et accès à des ressources vidéos préenregistrées, des tutoriels et des PDFs.</span></li><li style=\"text-align: left;\"><span style=\"background-color: var(--bs-body-bg); font-size: var(--bs-body-font-size); font-weight: var(--bs-body-font-weight); text-align: var(--bs-body-text-align);\">Formation en présentiel avec session exercices et réalisation</span></li></ol>\r\n\r\n        <h4 class=\"section-title\" style=\"text-align: left;\"><font color=\"#083139\"><b>Évaluation et Certification</b></font></h4>\r\n        <p style=\"text-align: left;\"><i>Évaluation </i>: Projets pratiques, quizz en ligne, examen final.</p>\r\n        <p style=\"text-align: left;\"><i>Certification</i> : Certificat de Compétence en Développement Web décerné à l\'issue de la formation.</p>\r\n\r\n        <h4 class=\"section-title\" style=\"text-align: left;\"><b><font color=\"#083139\">Ressources et Matériel Fournis</font></b></h4>\r\n        <ul>\r\n            <li style=\"text-align: left;\">Accès à une plateforme d\'apprentissage en ligne.</li>\r\n            <li style=\"text-align: left;\">Ressources téléchargeables : e-books, présentations, exercices pratiques, vidéos.</li>\r\n            <li style=\"text-align: left;\">Accès à un forum de discussion pour interaction avec les formateurs et autres étudiants.</li>\r\n        </ul>\r\n\r\n        <h4 class=\"section-title\" style=\"text-align: left;\"><b><font color=\"#083139\">Prix, Modalité et Inscription</font></b></h4>\r\n        <p style=\"text-align: left;\"><i>Prix </i>: 500 € pour l\'ensemble de la formation.</p><p style=\"text-align: left;\"><i>Modalité</i> : payable par tranche (100 000 / mois)</p>', 'https://i.postimg.cc/c4HN9hrq/developpement-web-featured.jpg', '2024-07-02 13:01:34', '5.00'),
+(3, 'GSM Mobil', 'le Gssm est le fait de reparer les telephone prtable pour leur', 'https://i.postimg.cc/RF83Dh4K/reparation-smartphone-a-wazemmes-lille-centre.jpg', '2024-07-13 20:19:29', '3.00'),
+(4, 'Bureautique', 'l\'informatique de bureau est une suite d\'enssemble de beaucoup de logicile ', 'https://i.postimg.cc/mkHcf4gq/informatique.jpg', '2024-07-13 20:21:18', '2.00'),
+(5, 'Audio visuel', 'la formation en audio visuel et l\'un des plus gra', 'https://i.postimg.cc/qRghwyVp/tournage-audiovisuel-preparer-concours.jpg', '2024-07-13 20:22:31', '100.00'),
+(6, 'Antenne Parabilique', 'l\'installation des antenne parabolique est un sheme', 'https://i.postimg.cc/76ZDjJ4h/parabole1.jpg', '2024-07-13 20:36:10', '0.00');
 
 -- --------------------------------------------------------
 
@@ -659,9 +690,33 @@ INSERT INTO `trainers` (`id`, `username`, `password`, `email`, `phone_number`, `
 (1, 'igor', '$2y$10$KFfPKK9HNHGCsPyIU7p4K.kod/4Hdw6vDrcy/KUD15I55mCx9c2ey', NULL, NULL, NULL, NULL),
 (9, 'Boris', '$2y$10$qAAOcpr9v.CjHqjLmtKIHu7LP9nLKPtzXh7qx6ECve2HIr8v7Km1G', 'boris@gmail.com', '6000000000', 'je suis un entrepreneur', '../avatar_img/O.jpg');
 
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `transactions`
+--
+
+CREATE TABLE `transactions` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `subscription_id` int(11) NOT NULL,
+  `payment_method` varchar(50) NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `payment_status` varchar(50) NOT NULL,
+  `transaction_date` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
 --
 -- Index pour les tables déchargées
 --
+
+--
+-- Index pour la table `abonnements`
+--
+ALTER TABLE `abonnements`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `student_id` (`student_id`),
+  ADD KEY `formation_id` (`formation_id`);
 
 --
 -- Index pour la table `administrators`
@@ -865,8 +920,22 @@ ALTER TABLE `trainers`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Index pour la table `transactions`
+--
+ALTER TABLE `transactions`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `subscription_id` (`subscription_id`);
+
+--
 -- AUTO_INCREMENT pour les tables déchargées
 --
+
+--
+-- AUTO_INCREMENT pour la table `abonnements`
+--
+ALTER TABLE `abonnements`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT pour la table `administrators`
@@ -1025,8 +1094,21 @@ ALTER TABLE `trainers`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
+-- AUTO_INCREMENT pour la table `transactions`
+--
+ALTER TABLE `transactions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- Contraintes pour les tables déchargées
 --
+
+--
+-- Contraintes pour la table `abonnements`
+--
+ALTER TABLE `abonnements`
+  ADD CONSTRAINT `abonnements_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`),
+  ADD CONSTRAINT `abonnements_ibfk_2` FOREIGN KEY (`formation_id`) REFERENCES `formations` (`id`);
 
 --
 -- Contraintes pour la table `cours`
@@ -1161,6 +1243,13 @@ ALTER TABLE `student_resources`
 --
 ALTER TABLE `topics`
   ADD CONSTRAINT `topics_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `students` (`id`);
+
+--
+-- Contraintes pour la table `transactions`
+--
+ALTER TABLE `transactions`
+  ADD CONSTRAINT `transactions_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `students` (`id`),
+  ADD CONSTRAINT `transactions_ibfk_2` FOREIGN KEY (`subscription_id`) REFERENCES `abonnements` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
