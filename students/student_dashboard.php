@@ -24,35 +24,34 @@ if (!$student) {
     exit;
 }
 
-// Récupérer les abonnements de l'étudiant avec le titre de la formation
+// Récupérer les formations auxquelles l'étudiant est inscrit et les détails des abonnements
 $stmt = $pdo->prepare("
     SELECT 
-        a.id, 
-        f.titre AS formation_titre, 
+        f.id AS formation_id, 
+        f.titre, 
+        f.description, 
         a.start_date, 
         a.end_date, 
-        a.price, 
+        f.price, 
         a.status, 
         a.transaction_details
-    FROM abonnements a
-    JOIN formations f ON a.formation_id = f.id
-    WHERE a.student_id = :student_id
+    FROM 
+        formations f
+    INNER JOIN 
+        inscriptions i ON f.id = i.formation_id 
+    INNER JOIN 
+        abonnements a ON i.formation_id = a.formation_id 
+    WHERE 
+        i.user_id = ?
 ");
-$stmt->bindParam(':student_id', $student_id, PDO::PARAM_INT);
-$stmt->execute();
-$subscriptions = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-if (!$subscriptions) {
-    $subscriptions = []; // Initialiser comme tableau vide si aucun résultat
-}
+$stmt->execute([$student_id]);
+$formations = $stmt->fetchAll();
 
 
-
-// Récupérer les IDs des formations
-$formation_ids = array_column($subscriptions, 'formation_id');
 
 
 // Récupérer les ressources associées aux formations de l'étudiant
+$formation_ids = array_column($formations, 'id');
 if (!empty($formation_ids)) {
     $in_query = implode(',', array_fill(0, count($formation_ids), '?'));
     $stmt = $pdo->prepare("SELECT * FROM resources WHERE formation_id IN ($in_query)");
@@ -76,31 +75,23 @@ if (!empty($formation_ids)) {
     $sessions = [];
 }
 
-// Récupérer les résultats des quiz filtrés par formation
+// Récupérer les résultats des quiz
 $stmt_results = $pdo->prepare("
-SELECT 
-    quizzes.titre, 
-    SUM(IF(questions.correct_option = student_answers.answer, 1, 0)) AS score, 
-    MAX(student_answers.submitted_at) AS date_taken
-FROM quizzes
-JOIN questions ON quizzes.id = questions.quiz_id
-LEFT JOIN student_answers ON questions.id = student_answers.question_id AND student_answers.student_id = ?
-WHERE quizzes.formation_id IN ($in_query)
-GROUP BY quizzes.id
+    SELECT quizzes.titre, SUM(IF(questions.correct_option = student_answers.answer, 1, 0)) AS score, MAX(student_answers.submitted_at) AS date_taken
+    FROM quizzes
+    JOIN questions ON quizzes.id = questions.quiz_id
+    LEFT JOIN student_answers ON questions.id = student_answers.question_id AND student_answers.student_id = ?
+    GROUP BY quizzes.id
 ");
+$stmt_results->execute([$student_id]);
+$results = $stmt_results->fetchAll();
 
-// Fusionner le tableau contenant $student_id et les IDs de formation
-$params = array_merge([$student_id], $formation_ids);
 
-$stmt_results->execute($params);
-$results = $stmt_results->fetchAll(PDO::FETCH_ASSOC);
-
-// Récupérer les quizzes disponibles filtrés par formation
+// Récupérer les quizzes disponibles
 $stmt_quizzes = $pdo->prepare("
     SELECT * FROM quizzes
-    WHERE formation_id IN ($in_query)
 ");
-$stmt_quizzes->execute($formation_ids);
+$stmt_quizzes->execute();
 $quizzes = $stmt_quizzes->fetchAll();
 
 // Récupérer les questions des quiz pour répondre
@@ -125,7 +116,6 @@ $stmt_notifications = $pdo->prepare("
 $stmt_notifications->execute([$student_id]);
 $notifications = $stmt_notifications->fetchAll();
 ?>
-
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -240,7 +230,7 @@ $notifications = $stmt_notifications->fetchAll();
                             <a class="nav-link" href="../pages/notes.php">Mes Notes</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="access_course.php">Mes Cours</a>
+                            <a class="nav-link" href="./access_course.php">Mes Cours</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="../forum/forum.php" target="_blank">Forum</a>
@@ -410,7 +400,6 @@ $notifications = $stmt_notifications->fetchAll();
                     </div>
                 </form>
 
-
                 <?php if ($selected_quiz_id && count($questions) > 0): ?>
                     <form action="submit_answers.php" method="POST">
                         <input type="hidden" name="quiz_id" value="<?php echo htmlspecialchars($selected_quiz_id); ?>">
@@ -445,32 +434,44 @@ $notifications = $stmt_notifications->fetchAll();
         </div>
 
         <!-- Section des formations -->
-        <div class="card mb-4 shadow p-2">
+<!-- Section des formations -->
+<div class="card mb-4 shadow p-2">
     <div class="card-body">
-        <h4 class="card-title">Vos Abonnements</h4>
+        <h4 class="card-title">Vos Formations Inscrites</h4>
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Formation ID</th>
-                        <th>Date de Début</th>
-                        <th>Date de Fin</th>
+                        <th>Titre</th>
+                        <th>Description</th>
+                        <th>Date de début</th>
+                        <th>Date de fin</th>
                         <th>Prix</th>
-                        <th>Status</th>
-                        <th>Détails de la Transaction</th>
+                        <th>Statut</th>
+                        <th>Détails de la transaction</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($subscriptions as $subscription): ?>
+                    <?php foreach ($formations as $formation): ?>
                         <tr>
-                            <td><?php echo htmlspecialchars($subscription['id']); ?></td>
-                            <td><?php echo htmlspecialchars($subscription['formation_titre']); ?></td>
-                            <td><?php echo htmlspecialchars($subscription['start_date']); ?></td>
-                            <td><?php echo htmlspecialchars($subscription['end_date']); ?></td>
-                            <td><?php echo htmlspecialchars($subscription['price']); ?> FCFA</td>
-                            <td><?php echo htmlspecialchars($subscription['status']); ?></td>
-                            <td><?php echo htmlspecialchars($subscription['transaction_details']); ?></td>
+                            <td><?php echo htmlspecialchars($formation['titre']); ?></td>
+                            <td>
+                                <?php 
+                                    $fullDescription = $formation['description'];
+                                    $shortDescription = substr(strip_tags($fullDescription), 0, 100);
+                                ?>
+                                <span class="short-description"><?php echo $shortDescription; ?></span>
+                                <?php if (strlen(strip_tags($fullDescription)) > 100): ?>
+                                    <span class="ellipsis">...</span>
+                                    <span class="full-description" style="display: none;"><?php echo substr($fullDescription, 100); ?></span>
+                                    <a href="#" class="toggle-description">Voir plus</a>
+                                <?php endif; ?>
+                            </td>
+                            <td><?php echo htmlspecialchars($formation['start_date']); ?></td>
+                            <td><?php echo htmlspecialchars($formation['end_date']); ?></td>
+                            <td><?php echo htmlspecialchars($formation['price']); ?></td>
+                            <td><?php echo htmlspecialchars($formation['status']); ?></td>
+                            <td><?php echo htmlspecialchars($formation['transaction_details']); ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -478,6 +479,7 @@ $notifications = $stmt_notifications->fetchAll();
         </div>
     </div>
 </div>
+
 
 
         <script>
