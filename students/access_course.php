@@ -1,7 +1,9 @@
 <?php
 session_start();
 include('../admin/config.php');
+include('../admin/functions.php'); // Assure-toi d'inclure un fichier contenant la fonction is_subscribed()
 
+// Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['student_id'])) {
     header('Location: login_student.php');
     exit;
@@ -9,15 +11,22 @@ if (!isset($_SESSION['student_id'])) {
 
 $student_id = $_SESSION['student_id'];
 
-// Vérifier si l'objet PDO est bien créé
-if (!$pdo) {
-    die("Erreur de connexion à la base de données");
+// Vérifier l'abonnement de l'étudiant
+$is_subscribed = is_subscribed($pdo, $student_id); // Passer $pdo comme premier argument
+
+if (!$is_subscribed) {
+    // Rediriger l'utilisateur vers la page de souscription
+    header('Location: ../abonnements/subscribe.php');
+    exit;
 }
 
 // Récupérer les formations auxquelles l'étudiant est inscrit
-$stmt = $pdo->prepare("SELECT formations.id FROM formations 
-                        INNER JOIN inscriptions ON formations.id = inscriptions.formation_id 
-                        WHERE inscriptions.user_id = ?");
+$stmt = $pdo->prepare("
+    SELECT f.id 
+    FROM formations f
+    INNER JOIN abonnements a ON f.id = a.formation_id 
+    WHERE a.student_id = ?
+");
 $stmt->execute([$student_id]);
 $formation_ids = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
@@ -37,39 +46,13 @@ if (!empty($formation_ids)) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>mes cours</title>
+    <title>Mes Cours</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="../assets/style.css">
     <link href="../assets/img/favicon.png" rel="icon">
     <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon">
     <style>
-        /* html, body {
-            height: 100%;
-            margin: 0;
-        }
-        body {
-            display: flex;
-            flex-direction: column;
-            background-color: #f8f9fa;
-            color: #333;
-        }
-        .container {
-            margin-top: 30px;
-            flex: 1;
-        }
-
-        .linkFooter {
-            background-color: #033e60;
-            color: #fff;
-            text-align: center;
-        }
-
-        .linkFooter p {
-            margin: 0;
-            padding: 10px 0;
-        } */
-
         .course-item {
             background: #fff;
             border: 1px solid #ddd;
@@ -126,10 +109,7 @@ if (!empty($formation_ids)) {
         <?php endif; ?>
     </div>
 
-
-
     <?php require_once ('../inclusion/footer_2.php'); ?>
-
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

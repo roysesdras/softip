@@ -7,15 +7,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $description = htmlspecialchars($_POST['description']);
     $image_url = htmlspecialchars($_POST['image_url']);
     $price = htmlspecialchars($_POST['price']);
-
-    $stmt = $pdo->prepare("INSERT INTO formations (titre, description, image_url, price) VALUES (?, ?, ?, ?)");
-    $stmt->execute([$titre, $description, $image_url, $price]);
-
-    $_SESSION['message'] = 'Formation ajoutée avec succès';
-    header('Location: ../admin/dashboard.php');
-    exit;
+    
+    // Validation des données
+    $errors = [];
+    if (empty($titre)) {
+        $errors[] = 'Le titre est requis.';
+    }
+    if (empty($description)) {
+        $errors[] = 'La description est requise.';
+    }
+    if (empty($image_url) || !filter_var($image_url, FILTER_VALIDATE_URL)) {
+        $errors[] = 'L\'URL de l\'image est invalide.';
+    }
+    if (empty($price) || !is_numeric($price)) {
+        $errors[] = 'Le prix doit être un nombre valide.';
+    }
+    
+    if (empty($errors)) {
+        try {
+            $stmt = $pdo->prepare("INSERT INTO formations (titre, description, image_url, price) VALUES (?, ?, ?, ?)");
+            $stmt->execute([$titre, $description, $image_url, $price]);
+            $_SESSION['message'] = 'Formation ajoutée avec succès';
+        } catch (PDOException $e) {
+            $_SESSION['message'] = 'Erreur lors de l\'ajout de la formation : ' . $e->getMessage();
+        }
+        header('Location: ../admin/dashboard.php');
+        exit;
+    } else {
+        $_SESSION['message'] = 'Erreurs : ' . implode(', ', $errors);
+        header('Location: ../admin/dashboard.php');
+        exit;
+    }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="fr">
