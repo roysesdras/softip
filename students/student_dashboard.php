@@ -15,11 +15,17 @@ if (!$pdo) {
 }
 
 // Vérifier l'état de l'abonnement
-$stmt = $pdo->prepare("SELECT status FROM abonnements WHERE student_id = ? ORDER BY end_date DESC LIMIT 1");
+$stmt = $pdo->prepare("SELECT status, end_date FROM abonnements WHERE student_id = ? ORDER BY end_date DESC LIMIT 1");
 $stmt->execute([$student_id]);
 $subscription = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$is_subscribed = ($subscription && $subscription['status'] === 'Actif');
+// Vérifier si l'abonnement est actif et non expiré
+$is_subscribed = ($subscription && $subscription['status'] === 'Actif' && strtotime($subscription['end_date']) > time());
+
+if (!$is_subscribed) {
+    header('Location: ../abonnements/subscribe.php');
+    exit;
+}
 
 // Récupérer le nom de l'étudiant
 $stmt = $pdo->prepare("SELECT username FROM students WHERE id = ?");
@@ -55,7 +61,7 @@ $stmt = $pdo->prepare("
 $stmt->execute([$student_id]);
 $formations_abonnements = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// // Affiche les résultats pour débogage
+// Affiche les résultats pour débogage
 // echo '<pre>';
 // print_r($formations_abonnements);
 // echo '</pre>';
@@ -71,21 +77,22 @@ if (!empty($formation_ids)) {
     $resources = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
     // Récupérer les sessions associées aux formations de l'étudiant avec les feedbacks
-    $stmt_sessions = $pdo->prepare("
-        SELECT sessions.*, formations.titre AS formation_titre, 
-               GROUP_CONCAT(feedbacks.feedback SEPARATOR '<br>') AS feedbacks
-        FROM sessions
-        INNER JOIN formations ON sessions.formation_id = formations.id
-        LEFT JOIN feedbacks ON sessions.id = feedbacks.session_id
-        WHERE sessions.formation_id IN ($in_query)
-        GROUP BY sessions.id, formations.titre
-    ");
-    $stmt_sessions->execute($formation_ids);
-    $sessions = $stmt_sessions->fetchAll(PDO::FETCH_ASSOC);
+$stmt_sessions = $pdo->prepare("
+SELECT sessions.*, formations.titre AS formation_titre, 
+       GROUP_CONCAT(feedbacks.feedback SEPARATOR '<br>') AS feedbacks
+FROM sessions
+INNER JOIN formations ON sessions.formation_id = formations.id
+LEFT JOIN feedbacks ON sessions.id = feedbacks.session_id
+WHERE sessions.formation_id IN ($in_query)
+GROUP BY sessions.id, formations.titre
+");
+$stmt_sessions->execute($formation_ids);
+$sessions = $stmt_sessions->fetchAll(PDO::FETCH_ASSOC);
 } else {
-    $resources = [];
-    $sessions = [];
+$resources = [];
+$sessions = [];
 }
+
 
 // Récupérer les résultats des quiz
 $stmt_results = $pdo->prepare("
@@ -397,9 +404,9 @@ $notifications = $stmt_notifications->fetchAll(PDO::FETCH_ASSOC);
                                 <tbody>
                                     <?php foreach ($sessions as $session): ?>
                                         <tr>
-                                            <td><?php echo htmlspecialchars($session['titre']); ?></td>
-                                            <td><?php echo htmlspecialchars($session['formation_titre']); ?></td>
-                                            <td><?php echo htmlspecialchars($session['feedbacks']); ?></td>
+                                            <td><?php echo htmlspecialchars(isset($session['titre']) ? $session['titre'] : 'Titre non disponible'); ?></td>
+                                            <td><?php echo htmlspecialchars(isset($session['formation_titre']) ? $session['formation_titre'] : 'Formation non disponible'); ?></td>
+                                            <td><?php echo htmlspecialchars(isset($session['feedbacks']) ? $session['feedbacks'] : 'Aucun feedback'); ?></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
@@ -418,7 +425,6 @@ $notifications = $stmt_notifications->fetchAll(PDO::FETCH_ASSOC);
                 </div>
             </div>
         <?php endif; ?>
-
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {

@@ -375,7 +375,7 @@ if (isset($_POST['restore_answer'])) {
         </div>
 
         <!-- Affchage des ressources -->
-        <div class="card mb-4 shadow p-2">
+        <div class="card mb-4 shadow p-2" id="resources">
             <div class="card-body">
                 <h3 class="card-title">Ressources</h3>
                 <div class="table-responsive mb-3">
@@ -405,7 +405,7 @@ if (isset($_POST['restore_answer'])) {
                         </tbody>
                     </table>
                 </div>
-                <a href="../resources/resources.php" class="btnb mt-3">
+                <a href="../resources/add_resource.php" class="btnb mt-3">
                     <i class="bi bi-plus-circle"></i> Ajouter
                 </a>
             </div>
@@ -607,7 +607,7 @@ if (isset($_POST['restore_answer'])) {
         </script>
 
         <!-- Feedbacks reçus -->
-        <div class="card mb-4 shadow p-2">
+        <!-- <div class="card mb-4 shadow p-2">
             <div class="card-body">
                 <h3 class="card-title">Feedbacks des Étudiants</h3>
                 <div class="table-responsive mb-3">
@@ -648,7 +648,7 @@ if (isset($_POST['restore_answer'])) {
                     </table>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <!-- Feedbacks donnés -->
         <div class="card mb-4 shadow p-2">

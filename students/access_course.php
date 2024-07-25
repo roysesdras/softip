@@ -1,7 +1,6 @@
 <?php
 session_start();
 include('../admin/config.php');
-include('../admin/functions.php'); // Assure-toi d'inclure un fichier contenant la fonction is_subscribed()
 
 // Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['student_id'])) {
@@ -10,15 +9,6 @@ if (!isset($_SESSION['student_id'])) {
 }
 
 $student_id = $_SESSION['student_id'];
-
-// Vérifier l'abonnement de l'étudiant
-$is_subscribed = is_subscribed($pdo, $student_id); // Passer $pdo comme premier argument
-
-if (!$is_subscribed) {
-    // Rediriger l'utilisateur vers la page de souscription
-    header('Location: ../abonnements/subscribe.php');
-    exit;
-}
 
 // Récupérer les formations auxquelles l'étudiant est inscrit
 $stmt = $pdo->prepare("
@@ -40,6 +30,8 @@ if (!empty($formation_ids)) {
     $courses = [];
 }
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="fr">

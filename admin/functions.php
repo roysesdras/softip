@@ -11,11 +11,20 @@
 ?>
 
 <?php
-    function is_subscribed($pdo, $student_id) {
-        $query = "SELECT COUNT(*) FROM abonnements WHERE student_id = :student_id AND status = 'Active'";
-        $stmt = $pdo->prepare($query);
-        $stmt->bindParam(':student_id', $student_id, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetchColumn() > 0;
-    }
+// functions.php
+
+function is_subscribed($pdo, $student_id) {
+    // Vérifier si l'étudiant a un abonnement actif
+    $stmt = $pdo->prepare("
+        SELECT COUNT(*) 
+        FROM abonnements 
+        WHERE student_id = ? 
+        AND status = 'active' 
+        AND NOW() BETWEEN start_date AND end_date
+    ");
+    $stmt->execute([$student_id]);
+    $count = $stmt->fetchColumn();
+
+    return $count > 0;
+}
 ?>

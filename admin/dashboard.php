@@ -83,7 +83,7 @@ $notifications = $stmt_notifications->fetchAll();
                                 <h3 class="card-title">Formations</h3>
                             </div>
                             <div class="card-body">
-                                <a href="../formations/add_formation.php" class="btn btn-primary mb-3">Ajouter Formation</a>
+                                
                                 <div class="table-responsive">
                                     <table class="table table-striped">
                                         <thead>
@@ -120,6 +120,7 @@ $notifications = $stmt_notifications->fetchAll();
                                         </tbody>
                                     </table>
                                 </div>
+                                <a href="../formations/add_formation.php" class="btn btn-outline-success mb-2">Ajouter Formation</a>
                             </div>
                         </div>
                     </div>
@@ -157,7 +158,7 @@ $notifications = $stmt_notifications->fetchAll();
                                 <h3 class="card-title">Ressources</h3>
                             </div>
                             <div class="card-body">
-                                <a href="../resources/resources.php" class="btn btn-primary mb-3">Gérer Ressources</a>
+                                
                                 <div class="table-responsive">
                                     <table class="table table-striped">
                                         <thead>
@@ -185,11 +186,12 @@ $notifications = $stmt_notifications->fetchAll();
                                         </tbody>
                                     </table>
                                 </div>
+                                <a href="../resources/resources.php" class="btn btn-outline-success mb-3">Gérer Ressources</a>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-lg-6 mb-4">
+                    <!-- <div class="col-lg-6 mb-4">
                         <div class="card">
                             <div class="card-header">
                                 <h3 class="card-title">Sessions</h3>
@@ -223,8 +225,43 @@ $notifications = $stmt_notifications->fetchAll();
                                 </div>
                             </div>
                         </div>
+                    </div>-->
+
+                    <div class="col-lg-6 mb-4 ">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Annonces</h3>
+                            </div>
+                            <div class="card-body">
+                                
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <!-- <th>Titre</th> -->
+                                                <th>Description</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($annonces as $annonce): ?>
+                                                <tr>
+                                                    <!-- <td><?php //echo htmlspecialchars($annonce['titre']); ?></td> -->
+                                                    <td><?php echo htmlspecialchars($annonce['description']); ?></td>
+                                                    <td>
+                                                        <a href="../annonces/edit_annonce.php?id=<?php echo $annonce['id']; ?>" class="btn btn-warning me-2 mb-2"><i class="bi bi-pencil-square"></i></a>
+                                                        <a href="../annonces/delete_annonce.php?id=<?php echo $annonce['id']; ?>" class="btn btn-danger"><i class="bi bi-trash"></i></a>
+                                                    </td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <a href="../annonces/add_annonce.php" class="btn btn-outline-success mb-3">Ajouter Annonce</a>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </div> 
 
                 <div class="row">
                 <div class="col-lg-12 mb-4 shadow p-0">
@@ -272,39 +309,7 @@ $notifications = $stmt_notifications->fetchAll();
 
 
                 <div class="row">
-                    <div class="col-lg-6 mb-4 ">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Annonces</h3>
-                            </div>
-                            <div class="card-body">
-                                <a href="../annonces/add_annonce.php" class="btn btn-primary mb-3">Ajouter Annonce</a>
-                                <div class="table-responsive">
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <!-- <th>Titre</th> -->
-                                                <th>Description</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php foreach ($annonces as $annonce): ?>
-                                                <tr>
-                                                    <!-- <td><?php //echo htmlspecialchars($annonce['titre']); ?></td> -->
-                                                    <td><?php echo htmlspecialchars($annonce['description']); ?></td>
-                                                    <td>
-                                                        <a href="../annonces/edit_annonce.php?id=<?php echo $annonce['id']; ?>" class="btn btn-warning me-2 mb-2"><i class="bi bi-pencil-square"></i></a>
-                                                        <a href="../annonces/delete_annonce.php?id=<?php echo $annonce['id']; ?>" class="btn btn-danger"><i class="bi bi-trash"></i></a>
-                                                    </td>
-                                                </tr>
-                                            <?php endforeach; ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    
 
                 <div class="col-lg-6 mb-4">
                     <div class="card">
@@ -312,7 +317,7 @@ $notifications = $stmt_notifications->fetchAll();
                             <h3 class="card-title">Notifications</h3>
                         </div>
                         <div class="card-body" id="notif">
-                            <a href="add_notification.php" class="btn btn-primary ">Ajouter Notification</a>
+                            
                             <div class="table-responsive">
                                 <table class="table table-striped">
                                     <thead>
@@ -340,6 +345,7 @@ $notifications = $stmt_notifications->fetchAll();
                                     </tbody>
                                 </table>
                             </div>
+                            <a href="add_notification.php" class="btn btn-outline-success ">Ajouter Notification</a>
                         </div>
                     </div>
                 </div>

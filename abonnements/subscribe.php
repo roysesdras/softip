@@ -172,7 +172,7 @@ $_SESSION['csrf_token'] = $csrf_token;
                 openKkiapayWidget({
                     amount: price,
                     api_key: "b5d6b530365511eca8f5b92f2997955b",
-                    sandbox: false,
+                    sandbox: true,
                     phone: "97000000",
                     name: "Nom de l'utilisateur",
                     callback: `http://localhost/softip/abonnements/confirm_payment.php?formation_id=${formationId}&csrf_token=${csrfToken}`

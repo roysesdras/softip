@@ -7,22 +7,17 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Vérifier si l'utilisateur est connecté
-if (!isset($_SESSION['student_id'])) {
+// Vérifier si l'utilisateur est connecté et s'il est formateur
+if (!isset($_SESSION['trainer_id'])) {
     header('Location: login.php');
     exit;
 }
 
-$student_id = $_SESSION['student_id'];
+$trainer_id = $_SESSION['trainer_id'];
 
-// Récupérer les formations auxquelles l'étudiant est abonné
-$stmt = $pdo->prepare("
-    SELECT f.id, f.titre 
-    FROM formations f
-    INNER JOIN abonnements a ON f.id = a.formation_id
-    WHERE a.student_id = ? AND a.status = 'Actif'
-");
-$stmt->execute([$student_id]);
+// Récupérer toutes les formations disponibles dans le système
+$stmt = $pdo->prepare("SELECT id, titre FROM formations");
+$stmt->execute();
 $formations = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Traiter l'ajout de la ressource
@@ -32,13 +27,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $description = htmlspecialchars($_POST['description']);
     $lien = htmlspecialchars($_POST['lien']);
 
-    // Vérifier si la formation sélectionnée est valide pour l'étudiant
+    // Vérifier si la formation sélectionnée est valide
     $stmt = $pdo->prepare("
         SELECT 1 
-        FROM abonnements 
-        WHERE student_id = ? AND formation_id = ? AND status = 'Actif'
+        FROM formations 
+        WHERE id = ?
     ");
-    $stmt->execute([$student_id, $formation_id]);
+    $stmt->execute([$formation_id]);
     
     if ($stmt->fetch()) {
         try {
@@ -46,13 +41,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([$formation_id, $titre, $description, $lien]);
 
             $_SESSION['success_message'] = 'Ressource ajoutée avec succès';
-            header('Location: resources.php');
+            header('Location: ../trainers/trainers.php#resources');
             exit;
         } catch (Exception $e) {
             $_SESSION['error_message'] = 'Erreur lors de l\'ajout de la ressource : ' . $e->getMessage();
         }
     } else {
-        $_SESSION['error_message'] = 'Vous n\'êtes pas autorisé à ajouter une ressource à cette formation.';
+        $_SESSION['error_message'] = 'La formation sélectionnée n\'existe pas.';
     }
 }
 ?>

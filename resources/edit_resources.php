@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Redirection avec un message de confirmation
     $_SESSION['success_message'] = 'Ressource modifiée avec succès';
-    header('Location: resources.php'); // Rediriger vers la page de gestion des ressources
+    header('Location: ../trainers/trainers.php#resources'); // Rediriger vers la page de gestion des ressources
     exit;
 }
 

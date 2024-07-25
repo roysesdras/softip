@@ -10,21 +10,6 @@ if (!isset($_SESSION['student_id']) && !isset($_SESSION['trainer_id']) && !isset
 
 $student_id = $_SESSION['student_id'] ?? null; // Récupérer l'ID de l'étudiant, s'il est connecté
 
-// Vérifier si l'étudiant a un abonnement actif
-if ($student_id) {
-    $query = "SELECT status FROM abonnements WHERE student_id = :student_id AND status = 'Active'";
-    $stmt = $pdo->prepare($query);
-    $stmt->bindParam(':student_id', $student_id, PDO::PARAM_INT);
-    $stmt->execute();
-    $subscription_active = $stmt->fetchColumn();
-    
-    if (!$subscription_active) {
-        // Rediriger l'étudiant vers la page de souscription s'il n'a pas d'abonnement actif
-        header('Location: ../abonnements/subscribe.php');
-        exit;
-    }
-}
-
 // Récupérer les sujets de discussion
 $query = "SELECT * FROM topics ORDER BY created_at DESC";
 $stmt = $pdo->query($query);
